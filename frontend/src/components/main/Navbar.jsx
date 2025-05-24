@@ -43,7 +43,7 @@ const Navbar = () => {
               <img 
                 src="/LogoNav.png" 
                 alt="Constructora Temuco" 
-                className="w-[180px] h-[100px] object-contain hover:scale-105 transition-transform duration-300" 
+                className="w-[120px] h-[60px] sm:w-[150px] sm:h-[80px] md:w-[180px] md:h-[100px] object-contain hover:scale-105 transition-transform duration-300" 
               />
             </Link>
 

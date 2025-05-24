@@ -1,8 +1,8 @@
-import Hero from "../components/Hero";
-import AboutUs from "../components/AboutUs";
-import Services from "../components/Services";
-import Process from "../components/Process";
-import Testimonials from "../components/Testimonials";
+import Hero from "../components/home/Hero";
+import AboutUs from "../components/home/AboutUs";
+import Services from "../components/home/Services";
+import Process from "../components/home/Process";
+import Testimonials from "../components/home/Testimonials";
 
 const Home = () => (
   <div>
