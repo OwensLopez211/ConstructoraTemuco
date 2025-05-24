@@ -70,16 +70,16 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="bg-gray-50 py-12 px-4 sm:py-16 md:py-20 sm:px-6">
+    <section className="bg-gray-50 py-8 px-3 sm:py-12 md:py-16 sm:px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <div className="inline-block mb-3 sm:mb-4">
-            <span className="bg-white text-gray-700 font-medium text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded border border-gray-200 tracking-wider">
+        <div className="text-center mb-6 sm:mb-8 md:mb-12">
+          <div className="inline-block mb-2 sm:mb-3">
+            <span className="bg-white text-gray-700 font-medium text-xs px-3 py-1.5 rounded border border-gray-200 tracking-wider">
               TESTIMONIOS
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
             Lo Que Dicen Nuestros Clientes
           </h2>
         </div>
@@ -87,29 +87,29 @@ const Testimonials = () => {
         {/* Testimonials Carousel */}
         <div className="relative">
           {/* Desktop: 3 cards, Mobile: 1 card */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="hidden md:grid md:grid-cols-3 gap-4 lg:gap-6">
             {getVisibleTestimonials().map((testimonial, index) => (
               <div
                 key={`${testimonial.id}-${index}`}
-                className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
+                className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300"
               >
                 {/* Header with avatar and quote */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center space-x-3">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-2.5">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="w-12 h-12 lg:w-14 lg:h-14 rounded-full object-cover"
+                      className="w-10 h-10 lg:w-12 lg:h-12 rounded-full object-cover"
                     />
-                    <h4 className="font-semibold text-gray-900 text-lg">
+                    <h4 className="font-semibold text-gray-900 text-base">
                       {testimonial.name}
                     </h4>
                   </div>
-                  <Quote className="w-8 h-8 lg:w-10 lg:h-10 text-green-600 flex-shrink-0" />
+                  <Quote className="w-6 h-6 lg:w-8 lg:h-8 text-green-600 flex-shrink-0" />
                 </div>
 
                 {/* Testimonial text */}
-                <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
+                <p className="text-gray-600 leading-relaxed text-sm lg:text-base">
                   {testimonial.testimonial}
                 </p>
               </div>
@@ -118,24 +118,24 @@ const Testimonials = () => {
 
           {/* Mobile: Single card carousel */}
           <div className="md:hidden">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
               {/* Header with avatar and quote */}
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center space-x-3">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-2.5">
                   <img
                     src={testimonials[currentIndex].image}
                     alt={testimonials[currentIndex].name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
-                  <h4 className="font-semibold text-gray-900 text-lg">
+                  <h4 className="font-semibold text-gray-900 text-base">
                     {testimonials[currentIndex].name}
                   </h4>
                 </div>
-                <Quote className="w-8 h-8 text-green-600 flex-shrink-0" />
+                <Quote className="w-6 h-6 text-green-600 flex-shrink-0" />
               </div>
 
               {/* Testimonial text */}
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed text-sm">
                 {testimonials[currentIndex].testimonial}
               </p>
             </div>
@@ -144,26 +144,26 @@ const Testimonials = () => {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group border border-gray-100"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center group border border-gray-100"
           >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-green-600" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover:text-green-600" />
           </button>
           
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group border border-gray-100"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center group border border-gray-100"
           >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-green-600" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover:text-green-600" />
           </button>
         </div>
 
         {/* Dots Indicator */}
-        <div className="flex justify-center space-x-2 mt-8 sm:mt-12">
+        <div className="flex justify-center space-x-1.5 mt-6 sm:mt-8">
           {Array.from({ length: Math.max(1, testimonials.length - 2) }).map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
                 index === currentIndex 
                   ? 'bg-green-600 scale-125' 
                   : 'bg-gray-300 hover:bg-gray-400'
