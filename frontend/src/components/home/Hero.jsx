@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Phone, Mail, MapPin, Award, Users, Building } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const CountUpNumber = ({ end, duration = 2000, suffix = "" }) => {
   const [count, setCount] = useState(0);
@@ -77,7 +78,12 @@ const ConstructoraTemucoHero = () => {
   }, []);
 
   return (
-    <div className="relative h-[calc(100vh-96px)] sm:pt-0 sm:h-[75vh] md:h-[70vh] overflow-hidden bg-slate-900">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="relative h-[calc(100vh-96px)] sm:pt-0 sm:h-[75vh] md:h-[70vh] overflow-hidden bg-slate-900"
+    >
       {/* Background Images Carousel */}
       <div className="absolute inset-0">
         {backgroundImages.map((image, index) => (
@@ -185,7 +191,13 @@ const ConstructoraTemucoHero = () => {
 
           {/* Right Content - Feature Cards */}
           <div className="space-y-4 animate-float hidden sm:block">
-            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300"
+            >
               <div className="flex items-start space-x-3">
                 <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Building className="w-5 h-5 text-white" />
@@ -195,9 +207,15 @@ const ConstructoraTemucoHero = () => {
                   <p className="text-gray-300 text-sm">Desde cimientos hasta acabados finales con los más altos estándares de calidad.</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300"
+            >
               <div className="flex items-start space-x-3">
                 <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Users className="w-5 h-5 text-white" />
@@ -207,9 +225,15 @@ const ConstructoraTemucoHero = () => {
                   <p className="text-gray-300 text-sm">Profesionales certificados con amplia experiencia en el sector.</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-4 hover:bg-white/15 transition-all duration-300"
+            >
               <div className="flex items-start space-x-3">
                 <div className="w-10 h-10 bg-green-700 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Award className="w-5 h-5 text-white" />
@@ -219,7 +243,7 @@ const ConstructoraTemucoHero = () => {
                   <p className="text-gray-300 text-sm">Respaldamos nuestro trabajo con garantías extendidas en todos nuestros proyectos.</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -244,7 +268,7 @@ const ConstructoraTemucoHero = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

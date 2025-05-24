@@ -1,4 +1,6 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 const ClientsBar = () => {
   // Array de clientes con logos y nombres
@@ -49,7 +51,13 @@ const ClientsBar = () => {
   const duplicatedClients = [...clients, ...clients];
 
   return (
-    <section className="relative py-12 bg-gradient-to-br from-slate-50 to-gray-100 overflow-hidden">
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="relative py-12 bg-gradient-to-br from-slate-50 to-gray-100 overflow-hidden"
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -139,7 +147,7 @@ const ClientsBar = () => {
           }
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 };
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Award, Users, Target, Shield } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 const CountUpNumber = ({ end, duration = 2000, suffix = "", className = "" }) => {
   const [count, setCount] = useState(0);
@@ -62,7 +64,13 @@ const CountUpNumber = ({ end, duration = 2000, suffix = "", className = "" }) =>
 
 const AboutUs = () => {
   return (
-    <section className="bg-white py-8 px-3 sm:py-16 sm:px-4">
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="bg-white py-8 px-3 sm:py-16 sm:px-4"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
           
@@ -208,7 +216,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

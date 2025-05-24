@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
+
 import Navbar from "./main/Navbar";
 import Footer from "./main/Footer";
+import ScrollToTop from "./animations/ScrollToTop";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -8,9 +10,15 @@ const MainLayout = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <Navbar />
-      <main className={`flex-grow ${!isHome ? 'container mx-auto px-4 py-8' : ''}`}>
-        <Outlet />
+      <main className="flex-grow">
+
+          
+            <div className={!isHome ? 'container mx-auto px-4 py-8' : ''}>
+              <Outlet />
+            </div>
+
       </main>
       <Footer />
     </div>

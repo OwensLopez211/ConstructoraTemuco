@@ -22,11 +22,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-1.5">
               <Phone className="w-3.5 h-3.5 text-green-200" />
-              <span className="text-xs text-white">+56 9 8765 4321</span>
+              <span className="text-xs text-white">+56 45 2 810749</span>
             </div>
             <div className="flex items-center space-x-1.5">
               <Mail className="w-3.5 h-3.5 text-green-200" />
-              <span className="text-xs text-white">info@constructoratemuco.cl</span>
+              <span className="text-xs text-white">contacto@ctemuco.cl</span>
             </div>
           </div>
           {/* Derecha: Horario */}
@@ -244,11 +244,11 @@ const Navbar = () => {
               <div className="pt-3 border-t border-gray-200 space-y-2">
                 <div className="flex items-center space-x-2 text-gray-600">
                   <Phone className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs">+56 9 8765 4321</span>
+                  <span className="text-xs">+56 45 2 810749</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600">
                   <Mail className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs">info@constructoratemuco.cl</span>
+                  <span className="text-xs">contacto@ctemuco.cl</span>
                 </div>
               </div>
             </nav>
