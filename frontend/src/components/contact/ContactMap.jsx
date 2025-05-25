@@ -1,16 +1,32 @@
-const ContactMap = () => (
-    <div className="rounded-xl overflow-hidden shadow mt-8 max-w-lg mx-auto">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.123456789!2d-72.612345!3d-38.735123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zMzjCsDQ0JzA2LjQiUyA3MsKwMzYnNDQuOCJX!5e0!3m2!1ses-419!2scl!4v1680000000000"
-        width="100%"
-        height="250"
-        style={{ border: 0 }}
-        allowFullScreen=""
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        title="Ubicación Constructora Temuco"
-      ></iframe>
+import { MapPin } from 'lucide-react';
+
+const ContactMap = () => {
+  return (
+    <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 border-0 shadow-xl">
+      <div className="flex items-center space-x-2 mb-4">
+        <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+          <MapPin className="w-4 h-4 text-white" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900">Nuestra ubicación</h3>
+      </div>
+      <div className="rounded-2xl overflow-hidden">
+        <iframe
+          src="https://www.google.com/maps?q=Volcán+Calbuco+345,+Temuco,+Chile&output=embed"
+          width="100%"
+          height="140"
+          style={{ border: 0 }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Ubicación Constructora Temuco"
+          className="rounded-2xl"
+        ></iframe>
+      </div>
+      <p className="text-gray-600 mt-3 text-xs">
+        Volcán Calbuco 345, Temuco, Región de La Araucanía, Chile
+      </p>
     </div>
   );
-  
-  export default ContactMap;
+};
+
+export default ContactMap;
