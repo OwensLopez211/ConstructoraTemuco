@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\ImageService;
 
 class ProjectImage extends Model
 {
@@ -14,8 +15,11 @@ class ProjectImage extends Model
         'filename',
         'original_name',
         'path',
+        'thumbnail_path',
         'size',
         'mime_type',
+        'width',
+        'height',
         'is_main',
         'order',
         'description'
@@ -25,6 +29,8 @@ class ProjectImage extends Model
         'is_main' => 'boolean',
         'size' => 'integer',
         'order' => 'integer',
+        'width' => 'integer',
+        'height' => 'integer',
     ];
 
     // Relaciones
@@ -47,7 +53,23 @@ class ProjectImage extends Model
     // Accessors
     public function getUrlAttribute()
     {
-        return asset('storage/' . $this->path);
+        try {
+            return app(ImageService::class)->getImageUrl($this->path);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        if ($this->thumbnail_path) {
+            try {
+                return app(ImageService::class)->getImageUrl($this->thumbnail_path);
+            } catch (\Exception $e) {
+                return $this->url;
+            }
+        }
+        return $this->url;
     }
 
     public function getFormattedSizeAttribute()
@@ -61,5 +83,47 @@ class ProjectImage extends Model
         }
 
         return $bytes . ' bytes';
+    }
+
+    public function getDimensionsAttribute()
+    {
+        if ($this->width && $this->height) {
+            return $this->width . 'x' . $this->height;
+        }
+        return null;
+    }
+
+    // Métodos de utilidad
+    public function setAsMain()
+    {
+        // Usar transacción para evitar problemas de concurrencia
+        \DB::transaction(function () {
+            // Quitar main de otras imágenes del mismo proyecto
+            static::where('project_id', $this->project_id)
+                  ->where('id', '!=', $this->id)
+                  ->update(['is_main' => false]);
+
+            // Establecer como main
+            $this->update(['is_main' => true]);
+        });
+
+        return $this;
+    }
+
+    // Boot method
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Al eliminar, limpiar archivos
+        static::deleting(function ($image) {
+            try {
+                $imageService = app(ImageService::class);
+                $imageService->deleteImage($image->path, $image->thumbnail_path);
+            } catch (\Exception $e) {
+                // Log error pero no fallar la eliminación del registro
+                \Log::error("Error deleting image files: " . $e->getMessage());
+            }
+        });
     }
 }

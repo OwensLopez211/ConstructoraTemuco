@@ -123,4 +123,20 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Image Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the configuration for image handling in your
+    | application, including maximum size, allowed types, quality and
+    | thumbnail dimensions.
+    |
+    */
+
+    'max_image_size' => env('MAX_IMAGE_SIZE', 10240),
+    'allowed_image_types' => env('ALLOWED_IMAGE_TYPES', 'jpg,jpeg,png,webp'),
+    'image_quality' => env('IMAGE_QUALITY', 85),
+    'thumbnail_size' => env('THUMBNAIL_SIZE', 300),
+
 ];
