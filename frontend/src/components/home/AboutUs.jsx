@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Award, Users, Target, Shield } from 'lucide-react';
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const CountUpNumber = ({ end, duration = 2000, suffix = "", className = "" }) => {

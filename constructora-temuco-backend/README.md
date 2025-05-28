@@ -463,15 +463,13 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 ## 👨‍💻 Autor
 
 **Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- Email: tu-email@ejemplo.com
+- GitHub: [@OwensLopez211](https://github.com/OwensLopez211/)
+- Email: owenslopez211@gmail.com
 
 ## 🙏 Reconocimientos
 
 - Laravel Framework
-- Comunidad de desarrolladores de La Araucanía
 - PostgreSQL por su robustez y confiabilidad
-
 ---
 
-**Constructora Temuco Backend API** - Desarrollado con ❤️ en Temuco, Chile
+**Constructora Temuco Backend API** 

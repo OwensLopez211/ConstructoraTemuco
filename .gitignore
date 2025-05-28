@@ -2,3 +2,7 @@
 /ctemuco.cl/
 
 .vscode/settings.json
+
+constructora-temuco-backend/.env.example
+constructora-temuco-backend/.env
+constructora-temuco-backend/.env.testing
