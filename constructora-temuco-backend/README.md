@@ -426,6 +426,7 @@ make test                    # Todos los tests
 make test-images            # Solo tests de imágenes
 make test-coverage          # Tests con cobertura
 ```
+image.png
 
 ## 📖 Uso
 
