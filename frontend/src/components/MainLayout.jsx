@@ -15,7 +15,7 @@ const MainLayout = () => {
       <main className="flex-grow">
 
           
-            <div className={!isHome ? 'container mx-auto px-4 py-8' : ''}>
+            <div className={!isHome }>
               <Outlet />
             </div>
 
