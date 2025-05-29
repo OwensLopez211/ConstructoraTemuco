@@ -25,7 +25,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'phone' => $request->phone,
                 'position' => $request->position,
-                'role' => 'employee', // Por defecto empleado
+                'role' => 'admin', // Por defecto admin por desarrollo
                 'is_active' => true,
             ]);
 

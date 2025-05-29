@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@vercel/speed-insights": "^1.2.0",
+    "axios": "^1.9.0",
     "framer-motion": "^12.12.2",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-countup": "^6.5.3",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.0",
+    "react-router-dom": "^7.6.1",
     "react-spring": "^10.0.1"
   },
   "devDependencies": {
