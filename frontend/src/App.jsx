@@ -8,6 +8,11 @@ import ToastContainer from './components/ui/Toast/ToastContainer';
 import MainLayout from "./components/MainLayout";
 import Home from "./pages/Home";
 import ContactPage from "./pages/ContactPage";
+// Importar las nuevas páginas de servicios
+import PrivateProjectsPage from "./pages/PrivateProjectsPage";
+import CivilWorksPage from "./pages/CivilWorksPage";
+import PublicProjectsPage from "./pages/PublicProjectsPage";
+import ProfessionalServicesPage from "./pages/ProfessionalServicesPage";
 
 // Componentes de autenticación
 import LoginPage from './pages/LoginPage';
@@ -20,6 +25,7 @@ import Dashboard from './pages/admin/Dashboard';
 import PropertyManagement from './pages/admin/PropertyManagement';
 import ProjectList from './pages/admin/ProjectList';
 import CreateProject from './pages/admin/CreateProject';
+import ProjectEditPage from './pages/admin/ProjectEditPage';
 
 function App() {
   return (
@@ -31,6 +37,11 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="contacto" element={<ContactPage />} />
+            {/* Rutas para las páginas de servicios */}
+            <Route path="servicios/proyectos-privados" element={<PrivateProjectsPage />} />
+            <Route path="servicios/obras-civiles" element={<CivilWorksPage />} />
+            <Route path="servicios/proyectos-publicos" element={<PublicProjectsPage />} />
+            <Route path="servicios/servicios-profesionales" element={<ProfessionalServicesPage />} />
           </Route>
           
           {/* Rutas de Autenticación - Sin layout (páginas completas) */}
@@ -51,6 +62,7 @@ function App() {
             <Route path="propiedades" element={<PropertyManagement />} />
             <Route path="proyectos" element={<ProjectList />} />
             <Route path="proyectos/crear" element={<CreateProject />} />
+            <Route path="proyectos/editar/:projectId" element={<ProjectEditPage />} />
           </Route>
           
           {/* Ruta 404 - Redirigir al home */}

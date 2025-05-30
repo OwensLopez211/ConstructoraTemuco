@@ -1,8 +1,23 @@
 // src/pages/admin/ProjectList.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { projectService } from '../../services/projectService';
 import { useNavigate } from 'react-router-dom';
 import ProjectDetailsModal from '../../components/admin/projects/ProjectDetailsModal';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Eye, 
+  Calendar, 
+  DollarSign, 
+  TrendingUp, 
+  Building2, 
+  User, 
+  ChevronLeft, 
+  ChevronRight,
+  MapPin,
+  Clock,
+  Star
+} from 'lucide-react';
+import ProjectCard from '../../components/admin/projects/ProjectCard';
 
 const ProjectList = () => {
   const navigate = useNavigate();
@@ -20,12 +35,11 @@ const ProjectList = () => {
     last_page: 1
   });
   const [meta, setMeta] = useState({});
-  // Nuevo estado para el modal de detalles
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   // Cargar proyectos del backend
-  const loadProjects = async (filters = {}) => {
+  const loadProjects = useCallback(async (filters = {}) => {
     try {
       setLoading(true);
       setError('');
@@ -34,9 +48,8 @@ const ProjectList = () => {
         search: searchTerm,
         type: filterType !== 'all' ? filterType : undefined,
         status: filterStatus !== 'all' ? filterStatus : undefined,
-        page: pagination.current_page,
+        page: filters.page !== undefined ? filters.page : pagination.current_page,
         per_page: pagination.per_page,
-        ...filters
       });
 
       setProjects(response.data);
@@ -48,60 +61,87 @@ const ProjectList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm, filterType, filterStatus, pagination.current_page, pagination.per_page]);
 
   // Cargar proyectos al montar el componente
   useEffect(() => {
     loadProjects();
-  }, []);
+  }, [loadProjects]);
 
   // Recargar cuando cambien los filtros
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       loadProjects({ page: 1 });
-    }, 300); // Debounce de 300ms
+    }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, filterType, filterStatus]);
+  }, [searchTerm, filterType, filterStatus, loadProjects]);
 
-  // Funciones de utilidad para mapear los datos del backend
-  const getTypeLabel = (type) => ({
-    gubernamental: 'Gubernamental',
-    privado: 'Privado'
-  }[type] || type);
 
-  const getTypeColor = (type) => ({
-    gubernamental: 'bg-blue-500',
-    privado: 'bg-purple-500'
-  }[type] || 'bg-gray-500');
+  const getTypeConfig = (type) => ({
+    gubernamental: { 
+      color: 'from-blue-500 to-blue-600',
+      bg: 'bg-blue-50',
+      text: 'text-blue-700',
+      icon: Building2
+    },
+    privado: { 
+      color: 'from-purple-500 to-purple-600',
+      bg: 'bg-purple-50',
+      text: 'text-purple-700',
+      icon: User
+    }
+  }[type] || { 
+    color: 'from-gray-500 to-gray-600',
+    bg: 'bg-gray-50',
+    text: 'text-gray-700',
+    icon: Building2
+  });
 
-  const getStatusLabel = (status) => ({
-    en_progreso: 'En Progreso',
-    completado: 'Completado',
-    pausado: 'Pausado',
-    cancelado: 'Cancelado'
-  }[status] || status);
-
-  const getStatusColor = (status) => ({
-    en_progreso: 'bg-blue-500',
-    completado: 'bg-green-500',
-    pausado: 'bg-yellow-500',
-    cancelado: 'bg-red-500'
-  }[status] || 'bg-gray-500');
+  const getStatusConfig = (status) => ({
+    en_progreso: { 
+      color: 'from-emerald-400 to-emerald-500',
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-700',
+      label: 'En Progreso'
+    },
+    completado: { 
+      color: 'from-green-500 to-green-600',
+      bg: 'bg-green-50',
+      text: 'text-green-700',
+      label: 'Completado'
+    },
+    pausado: { 
+      color: 'from-amber-400 to-amber-500',
+      bg: 'bg-amber-50',
+      text: 'text-amber-700',
+      label: 'Pausado'
+    },
+    cancelado: { 
+      color: 'from-red-400 to-red-500',
+      bg: 'bg-red-50',
+      text: 'text-red-700',
+      label: 'Cancelado'
+    }
+  }[status] || { 
+    color: 'from-gray-400 to-gray-500',
+    bg: 'bg-gray-50',
+    text: 'text-gray-700',
+    label: status
+  });
 
   const getProgressColor = (progress) => {
-    if (progress >= 80) return 'from-green-400 to-green-600';
-    if (progress >= 50) return 'from-blue-400 to-blue-600';
-    if (progress >= 25) return 'from-orange-400 to-orange-600';
-    return 'from-red-400 to-red-600';
+    if (progress >= 80) return 'from-green-400 to-green-500';
+    if (progress >= 50) return 'from-blue-400 to-blue-500';
+    if (progress >= 25) return 'from-orange-400 to-orange-500';
+    return 'from-red-400 to-red-500';
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Sin fecha';
     return new Date(dateString).toLocaleDateString('es-CL', {
       day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+      month: 'short'
     });
   };
 
@@ -110,7 +150,8 @@ const ProjectList = () => {
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
       currency: 'CLP',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
+      notation: 'compact'
     }).format(amount);
   };
 
@@ -122,7 +163,7 @@ const ProjectList = () => {
 
     try {
       await projectService.deleteProject(projectId);
-      loadProjects(); // Recargar la lista
+      loadProjects();
       alert('Proyecto eliminado exitosamente');
     } catch (err) {
       alert(`Error al eliminar proyecto: ${err.message}`);
@@ -133,7 +174,7 @@ const ProjectList = () => {
   const handleToggleStatus = async (projectId) => {
     try {
       await projectService.toggleProjectStatus(projectId);
-      loadProjects(); // Recargar la lista
+      loadProjects();
     } catch (err) {
       alert(`Error al cambiar estado: ${err.message}`);
     }
@@ -157,9 +198,9 @@ const ProjectList = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-48 bg-gray-200 rounded-xl"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="bg-gray-100 rounded-2xl h-80"></div>
               ))}
             </div>
           </div>
@@ -285,391 +326,186 @@ const ProjectList = () => {
         </div>
       </div>
 
-      {/* Content Area - Sin scroll vertical */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" style={{ height: 'calc(100vh - 280px)' }}>
-        {viewMode === 'cards' ? (
-          /* Vista de Cards */
-          <div className="h-full overflow-y-auto p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl hover:border-green-200 transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  {/* Header de la Card */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-900 text-lg mb-2 line-clamp-2 group-hover:text-green-600 transition-colors duration-200">
-                        {project.name}
-                      </h3>
-                      
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white ${getTypeColor(project.type)}`}>
-                          {getTypeLabel(project.type)}
-                        </span>
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(project.status)}`}>
-                          {getStatusLabel(project.status)}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className={`w-3 h-3 rounded-full ${project.is_active ? 'bg-green-500' : 'bg-red-500'} shadow-sm`}></div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Progreso</span>
-                      <span className="text-sm font-bold text-gray-900">{project.progress_percentage || 0}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                      <div
-                        className={`h-full bg-gradient-to-r ${getProgressColor(project.progress_percentage || 0)} rounded-full transition-all duration-500 shadow-sm`}
-                        style={{ width: `${project.progress_percentage || 0}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span className="text-sm font-medium">{project.location}</span>
-                  </div>
-
-                  {/* Budget */}
-                  {project.formatted_budget && (
-                    <div className="mb-4 p-3 bg-green-50 rounded-xl">
-                      <p className="text-xs text-green-700 font-medium">PRESUPUESTO</p>
-                      <p className="text-lg font-bold text-green-800">{project.formatted_budget}</p>
-                    </div>
-                  )}
-
-                  {/* Fechas */}
-                  <div className="grid grid-cols-2 gap-4 mb-4 p-3 bg-gray-50 rounded-xl">
-                    <div>
-                      <p className="text-xs text-gray-500 font-medium">INICIO</p>
-                      <p className="text-sm font-bold text-gray-900">{formatDate(project.start_date)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-medium">FIN ESTIMADO</p>
-                      <p className="text-sm font-bold text-gray-900">{formatDate(project.estimated_end_date)}</p>
-                    </div>
-                  </div>
-
-                  {/* Client Info */}
-                  {project.client_name && (
-                    <div className="mb-4 text-sm text-gray-600">
-                      <span className="font-medium">Cliente:</span> {project.client_name}
-                    </div>
-                  )}
-
-                  {/* Days remaining */}
-                  {project.days_remaining && (
-                    <div className="mb-4">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        project.days_remaining > 30 ? 'bg-green-100 text-green-800' :
-                        project.days_remaining > 7 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {project.days_remaining} días restantes
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => handleViewDetails(project.id)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
-                        title="Ver detalles"
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </button>
-                      {project.can_be_edited && (
-                        <button 
-                          onClick={() => window.location.href = `/admin/proyectos/${project.id}/edit`}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
-                          title="Editar proyecto"
-                        >
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
-                      )}
-                      <button 
-                        onClick={() => handleToggleStatus(project.id)}
-                        className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
-                        title={project.is_active ? 'Desactivar' : 'Activar'}
-                      >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                        </svg>
-                      </button>
-                    </div>
-                    
-                    <button 
-                      onClick={() => handleDeleteProject(project.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                      title="Eliminar proyecto"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+      {/* Contenido principal con scroll */}
+      <div className="flex-1 overflow-y-auto px-4 sm:px-8 pb-8">
+        {/* Cards View */}
+        {viewMode === 'cards' && (
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <AnimatePresence>
+              {projects.map((project, index) => (
+                <ProjectCard 
+                  key={project.id} 
+                  project={project} 
+                  index={index}
+                  handleViewDetails={handleViewDetails}
+                  handleDeleteProject={handleDeleteProject}
+                  navigate={navigate}
+                  getTypeConfig={getTypeConfig}
+                  getStatusConfig={getStatusConfig}
+                  getProgressColor={getProgressColor}
+                  formatDate={formatDate}
+                />
               ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {/* Empty State */}
+        {!loading && projects.length === 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+              <Building2 className="w-12 h-12 text-gray-400" />
             </div>
-          </div>
-        ) : (
-          /* Vista de Tabla Compacta */
-          <div className="h-full overflow-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 sticky top-0 z-10">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              No se encontraron proyectos
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Intenta cambiar los filtros o crear un nuevo proyecto
+            </p>
+            <button 
+              onClick={() => navigate('/admin/proyectos/crear')}
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            >
+              + Crear Primer Proyecto
+            </button>
+          </motion.div>
+        )}
+
+        {/* Table View (Manteniendo la vista de tabla original) */}
+        {viewMode === 'table' && (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Proyecto</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Info</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Presupuesto</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Fechas</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Acciones</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imágenes</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                  <th scope="col" className="relative px-6 py-3">
+                    <span className="sr-only">Acciones</span>
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200">
                 {projects.map((project) => (
-                  <tr key={project.id} className="hover:bg-gray-50 transition-colors duration-150">
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="font-semibold text-gray-900 mb-1">{project.name}</div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          </svg>
-                          {project.location}
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
-                          <div
-                            className={`h-2 bg-gradient-to-r ${getProgressColor(project.progress_percentage || 0)} rounded-full`}
-                            style={{ width: `${project.progress_percentage || 0}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs text-gray-500">{project.progress_percentage || 0}%</span>
-                        {project.client_name && (
-                          <div className="text-xs text-gray-500 mt-1">Cliente: {project.client_name}</div>
-                        )}
-                      </div>
+                  <tr key={project.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                       {project.images && project.images.length > 0 ? (
+                         <img 
+                           src={project.images[0].thumbnail_url} 
+                           alt={`Imagen de ${project.name}`}
+                           className="w-16 h-12 object-cover rounded"
+                         />
+                       ) : (
+                         <span className="text-gray-400 text-xs">Sin imágenes</span>
+                       )}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-2">
-                        <div className="flex gap-2">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getTypeColor(project.type)}`}>
-                            {getTypeLabel(project.type)}
-                          </span>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(project.status)}`}>
-                            {getStatusLabel(project.status)}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <div className={`w-2 h-2 rounded-full mr-2 ${project.is_active ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                            <span className="text-xs text-gray-600">{project.is_active ? 'Activo' : 'Inactivo'}</span>
-                          </div>
-                          {project.days_remaining && (
-                            <span className={`text-xs px-2 py-1 rounded-full ${
-                              project.days_remaining > 30 ? 'bg-green-100 text-green-700' :
-                              project.days_remaining > 7 ? 'bg-yellow-100 text-yellow-700' :
-                              'bg-red-100 text-red-700'
-                            }`}>
-                              {project.days_remaining}d
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                       <span
+                        className={`px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r ${getTypeConfig(project.type).color} text-white`}>
+                        {project.type_name}
+                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">
-                        {project.formatted_budget ? (
-                          <div className="font-semibold text-green-600">{project.formatted_budget}</div>
-                        ) : (
-                          <div className="text-gray-400">No definido</div>
-                        )}
-                        {project.user && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            Gestor: {project.user.name}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <div className="text-gray-900 font-medium">
-                          Inicio: {formatDate(project.start_date)}
-                        </div>
-                        <div className="text-gray-600">
-                          Fin Est.: {formatDate(project.estimated_end_date)}
-                        </div>
-                        {project.end_date && (
-                          <div className="text-green-600 text-xs">
-                            Completado: {formatDate(project.end_date)}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        <button 
-                          onClick={() => handleViewDetails(project.id)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
-                          title="Ver detalles"
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </button>
-                        {project.can_be_edited && (
-                          <button 
-                            onClick={() => window.location.href = `/admin/proyectos/${project.id}/edit`}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
-                            title="Editar"
-                          >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                          </button>
-                        )}
-                        <button 
-                          onClick={() => handleToggleStatus(project.id)}
-                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
-                          title={project.is_active ? 'Desactivar' : 'Activar'}
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                          </svg>
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteProject(project.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                          title="Eliminar"
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
+                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                       {project.client_name}
+                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                       <button
+                        onClick={(e) => { e.stopPropagation(); handleViewDetails(project.id); }}
+                        className="text-blue-600 hover:text-blue-900 mr-4"
+                       >
+                         Ver Detalles
+                       </button>
                     </td>
                   </tr>
                 ))}
+                 {!loading && projects.length === 0 && (
+                    <tr>
+                      <td colSpan="4" className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        No se encontraron proyectos.
+                      </td>
+                    </tr>
+                 )}
               </tbody>
             </table>
           </div>
         )}
 
-        {/* Sin resultados */}
-        {projects.length === 0 && !loading && (
-          <div className="flex flex-col items-center justify-center h-full text-center p-12">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-              <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No hay proyectos</h3>
-            <p className="text-gray-500 mb-6">No se encontraron proyectos con los filtros aplicados.</p>
-            <button 
-              onClick={() => {
-                setSearchTerm('');
-                setFilterType('all');
-                setFilterStatus('all');
-              }}
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200"
-            >
-              Limpiar filtros
-            </button>
+        {/* Paginación */}
+        {pagination.last_page > 1 && (
+          <div className="flex justify-center mt-8">
+            <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px bg-white border border-gray-200" aria-label="Pagination">
+              <button
+                onClick={() => loadProjects({ page: pagination.current_page - 1 })}
+                disabled={pagination.current_page <= 1}
+                className="relative inline-flex items-center px-3 py-2 rounded-l-xl border-r border-gray-200 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <span className="sr-only">Anterior</span>
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+
+              {/* Páginas */}
+              {[...Array(Math.min(pagination.last_page, 7))].map((_, i) => {
+                let pageNumber;
+                if (pagination.last_page <= 7) {
+                  pageNumber = i + 1;
+                } else {
+                  const current = pagination.current_page;
+                  const total = pagination.last_page;
+                  
+                  if (current <= 4) {
+                    pageNumber = i + 1;
+                  } else if (current >= total - 3) {
+                    pageNumber = total - 6 + i;
+                  } else {
+                    pageNumber = current - 3 + i;
+                  }
+                }
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => loadProjects({ page: pageNumber })}
+                    aria-current={pagination.current_page === pageNumber ? 'page' : undefined}
+                    className={`relative inline-flex items-center px-4 py-2 border-r border-gray-200 text-sm font-medium transition-colors duration-200 ${
+                      pagination.current_page === pageNumber
+                        ? 'z-10 bg-blue-50 text-blue-600 font-semibold'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => loadProjects({ page: pagination.current_page + 1 })}
+                disabled={pagination.current_page >= pagination.last_page}
+                className="relative inline-flex items-center px-3 py-2 rounded-r-xl text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <span className="sr-only">Siguiente</span>
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </nav>
           </div>
         )}
       </div>
-
-      {/* Paginación */}
-      {pagination.last_page > 1 && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              Mostrando {((pagination.current_page - 1) * pagination.per_page) + 1} a {Math.min(pagination.current_page * pagination.per_page, pagination.total)} de {pagination.total} proyectos
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                  if (pagination.current_page > 1) {
-                    setPagination(prev => ({ ...prev, current_page: prev.current_page - 1 }));
-                    loadProjects({ page: pagination.current_page - 1 });
-                  }
-                }}
-                disabled={pagination.current_page <= 1}
-                className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Anterior
-              </button>
-              
-              <div className="flex items-center gap-1">
-                {[...Array(Math.min(5, pagination.last_page))].map((_, i) => {
-                  const page = i + 1;
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => {
-                        setPagination(prev => ({ ...prev, current_page: page }));
-                        loadProjects({ page });
-                      }}
-                      className={`px-3 py-2 text-sm rounded-lg ${
-                        pagination.current_page === page
-                          ? 'bg-green-600 text-white'
-                          : 'border border-gray-300 hover:bg-gray-50'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={() => {
-                  if (pagination.current_page < pagination.last_page) {
-                    setPagination(prev => ({ ...prev, current_page: prev.current_page + 1 }));
-                    loadProjects({ page: pagination.current_page + 1 });
-                  }
-                }}
-                disabled={pagination.current_page >= pagination.last_page}
-                className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de Detalles del Proyecto */}
-      <ProjectDetailsModal
-        projectId={selectedProjectId}
-        isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
-      />
-
-      {/* Loading overlay */}
-      {loading && projects.length > 0 && (
-        <div className="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 flex items-center gap-4">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
-            <span>Cargando proyectos...</span>
-          </div>
-        </div>
+      
+      {/* Modal de Detalles */}
+      {isDetailsModalOpen && (
+        <ProjectDetailsModal
+          projectId={selectedProjectId}
+          isOpen={isDetailsModalOpen}
+          onClose={handleCloseDetailsModal}
+        />
       )}
     </div>
   );

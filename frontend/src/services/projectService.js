@@ -199,5 +199,207 @@ export const projectService = {
         'Error de conexión al obtener estadísticas'
       );
     }
+  },
+
+  // Obtener opciones para formularios (tipos, estados, usuarios)
+  async getProjectOptions() {
+    try {
+      const response = await api.get('/projects/options/form-data');
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al obtener opciones del proyecto');
+      }
+    } catch (error) {
+      console.error('Error fetching project options:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al obtener opciones del proyecto'
+      );
+    }
+  },
+
+  // ===== MÉTODOS PARA GESTIÓN DE IMÁGENES =====
+
+  // Obtener todas las imágenes de un proyecto
+  async getProjectImages(projectId) {
+    try {
+      const response = await api.get(`/projects/${projectId}/images`);
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al obtener imágenes');
+      }
+    } catch (error) {
+      console.error('Error fetching project images:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al obtener imágenes'
+      );
+    }
+  },
+
+  // Subir múltiples imágenes a un proyecto
+  async uploadProjectImages(projectId, imageData) {
+    try {
+      const response = await api.post(`/projects/${projectId}/images`, imageData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data,
+          message: response.data.message || 'Imágenes subidas exitosamente'
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al subir imágenes');
+      }
+    } catch (error) {
+      console.error('Error uploading project images:', error);
+      
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors || {};
+        const firstError = Object.values(errors)[0]?.[0];
+        throw new Error(firstError || 'Error de validación al subir imágenes');
+      }
+
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al subir imágenes'
+      );
+    }
+  },
+
+  // Obtener información de una imagen específica
+  async getProjectImage(projectId, imageId) {
+    try {
+      const response = await api.get(`/projects/${projectId}/images/${imageId}`);
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al obtener imagen');
+      }
+    } catch (error) {
+      console.error('Error fetching project image:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al obtener imagen'
+      );
+    }
+  },
+
+  // Actualizar información de una imagen (descripción, orden)
+  async updateProjectImage(projectId, imageId, imageData) {
+    try {
+      const response = await api.put(`/projects/${projectId}/images/${imageId}`, imageData);
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data,
+          message: response.data.message || 'Imagen actualizada exitosamente'
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al actualizar imagen');
+      }
+    } catch (error) {
+      console.error('Error updating project image:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al actualizar imagen'
+      );
+    }
+  },
+
+  // Eliminar una imagen específica
+  async deleteProjectImage(projectId, imageId) {
+    try {
+      const response = await api.delete(`/projects/${projectId}/images/${imageId}`);
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          message: response.data.message || 'Imagen eliminada exitosamente'
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al eliminar imagen');
+      }
+    } catch (error) {
+      console.error('Error deleting project image:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al eliminar imagen'
+      );
+    }
+  },
+
+  // Establecer una imagen como principal
+  async setMainProjectImage(projectId, imageId) {
+    try {
+      const response = await api.patch(`/projects/${projectId}/images/${imageId}/set-main`);
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          data: response.data.data,
+          message: response.data.message || 'Imagen principal establecida exitosamente'
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al establecer imagen principal');
+      }
+    } catch (error) {
+      console.error('Error setting main image:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al establecer imagen principal'
+      );
+    }
+  },
+
+  // Reordenar imágenes de un proyecto
+  async reorderProjectImages(projectId, imageIds) {
+    try {
+      const response = await api.patch(`/projects/${projectId}/images/reorder`, {
+        image_ids: imageIds
+      });
+      
+      if (response.data.success) {
+        return {
+          success: true,
+          message: response.data.message || 'Imágenes reordenadas exitosamente'
+        };
+      } else {
+        throw new Error(response.data.message || 'Error al reordenar imágenes');
+      }
+    } catch (error) {
+      console.error('Error reordering images:', error);
+      throw new Error(
+        error.response?.data?.message || 
+        error.message || 
+        'Error de conexión al reordenar imágenes'
+      );
+    }
   }
 };

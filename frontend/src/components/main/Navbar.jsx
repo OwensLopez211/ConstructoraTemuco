@@ -1,9 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X, Phone, Mail } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Phone, Mail, Clock, Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState("inicio");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -13,248 +18,230 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
+  // Detectar scroll para cambiar el estilo del navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navigationItems = [
+    { id: "inicio", label: "Inicio", path: "/" },
+    { id: "servicios", label: "Servicios", href: "#servicios" },
+    { id: "proyectos", label: "Proyectos", path: "/proyectos" },
+    { id: "nosotros", label: "Nosotros", path: "/nosotros" },
+    { id: "contacto", label: "Contacto", path: "/contacto" }
+  ];
+
+  // Función para manejar la navegación
+  const handleNavigation = (item) => {
+    closeMenu();
+    if (item.href && item.href.startsWith('#')) {
+      // Es un enlace de ancla
+      const targetId = item.href.substring(1);
+      const element = document.getElementById(targetId);
+      
+      if (location.pathname === '/') {
+        // Si ya estamos en la página de inicio, hacer scroll directo
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // Si no estamos en la página de inicio, navegar a / y pasar el hash
+        navigate('/', { state: { scrollToId: targetId } });
+      }
+    } else if (item.path) {
+      // Es una ruta de React Router
+      navigate(item.path);
+    }
+  };
+
+  // Determinar cuál pestaña está activa basándose en la ruta actual o el hash
+  const getActiveTab = () => {
+    const currentPath = location.pathname;
+    const currentHash = location.hash;
+
+    // Priorizar el hash si existe y coincide con un href de ancla
+    if (currentHash) {
+      const activeItem = navigationItems.find(item => item.href === currentHash);
+      if (activeItem) return activeItem.id;
+    }
+
+    // Si no hay hash o no coincide, usar la ruta
+    const activeItem = navigationItems.find(item => item.path === currentPath);
+    return activeItem ? activeItem.id : "inicio";
+  };
+
+  // Initialize activeTab state using getActiveTab
+  useEffect(() => {
+    setActiveTab(getActiveTab());
+  }, [location]); // Depende de location and getActiveTab (though getActiveTab dependencies are handled by location and navigationItems)
+
   return (
     <>
       {/* Top bar con información de contacto */}
-      <div className="bg-primary text-white py-2 hidden lg:block border-b border-white/10">
-        <div className="container mx-auto px-4 flex justify-between items-center text-xs">
+      <motion.div 
+        className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 hidden lg:block"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto px-4 flex justify-between items-center">
           {/* Izquierda: Teléfono y correo */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1.5">
-              <Phone className="w-3.5 h-3.5 text-green-200" />
-              <span className="text-xs text-white">+56 45 2 810749</span>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 group">
+              <Phone className="w-4 h-4 text-green-200 group-hover:text-white transition-colors" />
+              <span className="text-sm font-medium">+56 45 2 810749</span>
             </div>
-            <div className="flex items-center space-x-1.5">
-              <Mail className="w-3.5 h-3.5 text-green-200" />
-              <span className="text-xs text-white">contacto@ctemuco.cl</span>
+            <div className="flex items-center space-x-2 group">
+              <Mail className="w-4 h-4 text-green-200 group-hover:text-white transition-colors" />
+              <span className="text-sm font-medium">contacto@ctemuco.cl</span>
             </div>
           </div>
-          {/* Derecha: Horario */}
-          <div className="flex items-center space-x-1.5">
-            <span className="inline-block w-3.5 h-3.5 text-green-200">
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' className="w-3.5 h-3.5"><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16.72 11.06c-.36-.13-.76-.03-1.03.25l-2.2 2.2a11.05 11.05 0 01-4.24-4.24l2.2-2.2a.997.997 0 00.25-1.03A9.05 9.05 0 003.05 6.05c-.55.1-.97.57-.97 1.13 0 8.28 6.72 15 15 15 .56 0 1.03-.42 1.13-.97a9.05 9.05 0 00-2.49-7.15z' /></svg>
-            </span>
-            <span className="text-xs text-white">Horario: Lun - Vie 8:00 AM - 6:00 PM</span>
+          
+          {/* Derecha: Horario y CTA */}
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4 text-green-200" />
+              <span className="text-sm font-medium">Lun - Vie 8:00 AM - 6:00 PM</span>
+            </div>
+            <motion.button
+              onClick={() => handleNavigation('/contacto')}
+              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-semibold border border-white/20 transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Cotización Gratis
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Navbar principal */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-2">
+      <motion.header 
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100' 
+            : 'bg-white/90 backdrop-blur-sm shadow-md'
+        }`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to="/" className="flex-shrink-0">
-              <img 
-                src="/LogoNav.png" 
-                alt="Constructora Temuco" 
-                className="w-[80px] h-[40px] sm:w-[100px] sm:h-[50px] md:w-[120px] md:h-[60px] object-contain hover:scale-105 transition-transform duration-300" 
-              />
-            </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-6">
-              <NavLink 
-                to="/" 
-                end 
-                className={({ isActive }) => 
-                  `relative py-1.5 px-1 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? "text-primary" 
-                      : "text-gray-700 hover:text-primary"
-                  } after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : ""
-                  }`
-                }
-              >
-                Inicio
-              </NavLink>
-              
-              <NavLink 
-                to="/servicios" 
-                className={({ isActive }) => 
-                  `relative py-1.5 px-1 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? "text-primary" 
-                      : "text-gray-700 hover:text-primary"
-                  } after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : ""
-                  }`
-                }
-              >
-                Servicios
-              </NavLink>
-              
-              <NavLink 
-                to="/proyectos" 
-                className={({ isActive }) => 
-                  `relative py-1.5 px-1 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? "text-primary" 
-                      : "text-gray-700 hover:text-primary"
-                  } after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : ""
-                  }`
-                }
-              >
-                Proyectos
-              </NavLink>
-              
-              <NavLink 
-                to="/acerca" 
-                className={({ isActive }) => 
-                  `relative py-1.5 px-1 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? "text-primary" 
-                      : "text-gray-700 hover:text-primary"
-                  } after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : ""
-                  }`
-                }
-              >
-                Nosotros
-              </NavLink>
-              
-              <NavLink 
-                to="/contacto" 
-                className={({ isActive }) => 
-                  `relative py-1.5 px-1 text-sm font-medium transition-all duration-300 ${
-                    isActive 
-                      ? "text-primary" 
-                      : "text-gray-700 hover:text-primary"
-                  } after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 ${
-                    isActive ? "after:scale-x-100" : ""
-                  }`
-                }
-              >
-                Contacto
-              </NavLink>
-            </nav>
-
-            {/* CTA Button - Desktop */}
-            <div className="hidden lg:block">
-              <Link to="/contacto">
-                <button className="bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white px-5 py-2 rounded-md text-sm font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-                  Contáctanos Hoy
+            <nav className="hidden lg:flex items-center justify-center space-x-4 flex-grow">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigation(item)}
+                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 group ${
+                    activeTab === item.id
+                      ? "text-green-600 bg-green-50" 
+                      : "text-gray-700 hover:text-green-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.label}
+                  <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-green-600 to-blue-600 transition-all duration-300 ${
+                    activeTab === item.id ? "w-8" : "group-hover:w-8"
+                  }`} />
                 </button>
-              </Link>
-            </div>
+              ))}
+            </nav>
 
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden p-1.5 rounded-md text-gray-700 hover:text-primary hover:bg-gray-100 transition-colors duration-200"
+              className="lg:hidden p-2 rounded-xl text-gray-700 hover:text-green-600 hover:bg-gray-100 transition-all duration-200"
             >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+              <motion.div
+                animate={{ rotate: isMenuOpen ? 90 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </motion.div>
             </button>
           </div>
 
           {/* Mobile Navigation */}
-          <div className={`lg:hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen 
-              ? "max-h-80 opacity-100 mt-3" 
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}>
-            <nav className="flex flex-col space-y-2 py-3 border-t border-gray-200">
-              <NavLink 
-                to="/" 
-                end 
-                onClick={closeMenu}
-                className={({ isActive }) => 
-                  `py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`
-                }
-              >
-                Inicio
-              </NavLink>
-              
-              <NavLink 
-                to="/servicios" 
-                onClick={closeMenu}
-                className={({ isActive }) => 
-                  `py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`
-                }
-              >
-                Servicios
-              </NavLink>
-              
-              <NavLink 
-                to="/proyectos" 
-                onClick={closeMenu}
-                className={({ isActive }) => 
-                  `py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`
-                }
-              >
-                Proyectos
-              </NavLink>
-              
-              <NavLink 
-                to="/acerca" 
-                onClick={closeMenu}
-                className={({ isActive }) => 
-                  `py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`
-                }
-              >
-                Nosotros
-              </NavLink>
-              
-              <NavLink 
-                to="/contacto" 
-                onClick={closeMenu}
-                className={({ isActive }) => 
-                  `py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-                    isActive 
-                      ? "text-primary bg-primary/10" 
-                      : "text-gray-700 hover:text-primary hover:bg-gray-50"
-                  }`
-                }
-              >
-                Contacto
-              </NavLink>
+          <motion.div 
+            className="lg:hidden overflow-hidden"
+            initial={false}
+            animate={{
+              height: isMenuOpen ? "auto" : 0,
+              opacity: isMenuOpen ? 1 : 0
+            }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <nav className="flex flex-col space-y-1 py-4 border-t border-gray-100 mt-4">
+              {navigationItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={isMenuOpen ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <button
+                    onClick={() => handleNavigation(item)}
+                    className={`w-full text-left py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 ${
+                      activeTab === item.id
+                        ? "text-green-600 bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-600" 
+                        : "text-gray-700 hover:text-green-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </motion.div>
+              ))}
 
               {/* Mobile CTA Button */}
-              <div className="pt-3 border-t border-gray-200">
-                <Link to="/contacto" onClick={closeMenu}>
-                  <button className="w-full bg-gradient-to-r from-primary to-primary-dark text-white py-2.5 rounded-md text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300">
-                    Contáctanos Hoy
-                  </button>
-                </Link>
-              </div>
+              <motion.div 
+                className="pt-4 border-t border-gray-100"
+                initial={{ y: 20, opacity: 0 }}
+                animate={isMenuOpen ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <button 
+                  onClick={() => handleNavigation('/contacto')}
+                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300"
+                >
+                  Contáctanos Hoy
+                </button>
+              </motion.div>
 
               {/* Mobile Contact Info */}
-              <div className="pt-3 border-t border-gray-200 space-y-2">
-                <div className="flex items-center space-x-2 text-gray-600">
-                  <Phone className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs">+56 45 2 810749</span>
+              <motion.div 
+                className="pt-4 border-t border-gray-100 space-y-3"
+                initial={{ y: 20, opacity: 0 }}
+                animate={isMenuOpen ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <div className="flex items-center space-x-3 text-gray-600">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Phone className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span className="text-sm font-medium">+56 45 2 810749</span>
                 </div>
-                <div className="flex items-center space-x-2 text-gray-600">
-                  <Mail className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs">contacto@ctemuco.cl</span>
+                <div className="flex items-center space-x-3 text-gray-600">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <span className="text-sm font-medium">contacto@ctemuco.cl</span>
                 </div>
-              </div>
+              </motion.div>
             </nav>
-          </div>
+          </motion.div>
         </div>
-      </header>
+      </motion.header>
     </>
   );
 };

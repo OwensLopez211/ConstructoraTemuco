@@ -19,7 +19,14 @@ class ProjectController extends Controller
     {
         try {
             $user = $request->user();
-            $query = Project::with(['user:id,name,email,role']);
+            $query = Project::with([
+                'user:id,name,email,role',
+                'images' => function($query) {
+                    $query->select('id', 'project_id', 'thumbnail_path', 'is_main', 'order')
+                          ->orderBy('order')
+                          ->orderByDesc('is_main');
+                }
+            ]);
 
             // Filtrar proyectos según el rol del usuario
             if (!$user->isManager()) {
@@ -125,6 +132,14 @@ class ProjectController extends Controller
                     ],
                     'created_at' => $project->created_at,
                     'updated_at' => $project->updated_at,
+                    'images' => $project->images->map(function($image) {
+                        return [
+                            'id' => $image->id,
+                            'thumbnail_url' => $image->thumbnail_url,
+                            'is_main' => $image->is_main,
+                        ];
+                    })->toArray(),
+                    'images_count' => $project->images->count(),
                 ];
             });
 
@@ -365,32 +380,32 @@ class ProjectController extends Controller
         try {
             $user = $request->user();
             $query = Project::query();
+            $userFilteredQuery = clone $query;
 
-            // Filtrar según permisos del usuario
             if (!$user->isManager()) {
-                $query->where('user_id', $user->id);
+                $userFilteredQuery->where('user_id', $user->id);
             }
 
             $stats = [
-                'total_projects' => $query->count(),
-                'active_projects' => $query->active()->count(),
+                'total_projects' => Project::count(),
+                'active_projects' => Project::active()->count(),
                 'by_status' => [
-                    'planificacion' => $query->byStatus('planificacion')->count(),
-                    'en_progreso' => $query->byStatus('en_progreso')->count(),
-                    'pausado' => $query->byStatus('pausado')->count(),
-                    'completado' => $query->byStatus('completado')->count(),
-                    'cancelado' => $query->byStatus('cancelado')->count(),
+                    'planificacion' => $userFilteredQuery->byStatus('planificacion')->count(),
+                    'en_progreso' => $userFilteredQuery->byStatus('en_progreso')->count(),
+                    'pausado' => $userFilteredQuery->byStatus('pausado')->count(),
+                    'completado' => $userFilteredQuery->byStatus('completado')->count(),
+                    'cancelado' => $userFilteredQuery->byStatus('cancelado')->count(),
                 ],
                 'by_type' => [
-                    'gubernamental' => $query->byType('gubernamental')->count(),
-                    'privado' => $query->byType('privado')->count(),
+                    'gubernamental' => $userFilteredQuery->byType('gubernamental')->count(),
+                    'privado' => $userFilteredQuery->byType('privado')->count(),
                 ],
                 'budget_stats' => [
-                    'total_budget' => $query->sum('budget'),
-                    'average_budget' => $query->avg('budget'),
-                    'completed_budget' => $query->byStatus('completado')->sum('budget'),
+                    'total_budget' => $userFilteredQuery->sum('budget'),
+                    'average_budget' => $userFilteredQuery->avg('budget'),
+                    'completed_budget' => $userFilteredQuery->byStatus('completado')->sum('budget'),
                 ],
-                'overdue_projects' => $query->where('estimated_end_date', '<', now())
+                'overdue_projects' => $userFilteredQuery->where('estimated_end_date', '<', now())
                                            ->whereNotIn('status', ['completado', 'cancelado'])
                                            ->count(),
             ];
@@ -494,7 +509,26 @@ class ProjectController extends Controller
         if ($detailed) {
             $data['user']['phone'] = $project->user->phone ?? null;
             $data['user']['position'] = $project->user->position ?? null;
-            $data['images'] = $project->images ?? [];
+            $data['images'] = $project->images->map(function($image) {
+                 return [
+                    'id' => $image->id,
+                    'filename' => $image->filename,
+                    'original_name' => $image->original_name,
+                    'path' => $image->path,
+                    'thumbnail_path' => $image->thumbnail_path,
+                    'size' => $image->size,
+                    'formatted_size' => $image->formatted_size,
+                    'mime_type' => $image->mime_type,
+                    'width' => $image->width,
+                    'height' => $image->height,
+                    'dimensions' => $image->dimensions,
+                    'is_main' => $image->is_main,
+                    'order' => $image->order,
+                    'description' => $image->description,
+                    'url' => $image->url,
+                    'thumbnail_url' => $image->thumbnail_url,
+                 ];
+            })->toArray() ?? [];
         }
 
         return $data;

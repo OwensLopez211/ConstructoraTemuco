@@ -35,14 +35,12 @@ const Footer = () => {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                  <Building className="w-6 h-6 text-white" />
-                </div>
+                <img src="/LogoNav.png" alt="Constructora Temuco Logo" className="w-12" />
                 <h3 className="text-xl sm:text-2xl font-bold">Constructora Temuco</h3>
               </div>
               
               <p className="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base max-w-md">
-                Más de 10 años construyendo sueños en Temuco y la Región de La Araucanía. 
+                Más de 15 años construyendo sueños en Temuco y la Región de La Araucanía. 
                 Especialistas en construcción residencial y comercial con los más altos 
                 estándares de calidad y compromiso.
               </p>

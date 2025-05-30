@@ -136,7 +136,7 @@ return [
 
     'max_image_size' => env('MAX_IMAGE_SIZE', 10240),
     'allowed_image_types' => env('ALLOWED_IMAGE_TYPES', 'jpg,jpeg,png,webp'),
-    'image_quality' => env('IMAGE_QUALITY', 85),
+    'image_quality' => (int) env('IMAGE_QUALITY', 85),
     'thumbnail_size' => env('THUMBNAIL_SIZE', 300),
 
 ];

@@ -14,7 +14,7 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }) => {
   }, [duration, onClose]);
 
   const getToastStyles = () => {
-    const baseStyles = "fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 transform";
+    const baseStyles = "p-4 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 transform";
     
     const typeStyles = {
       success: "bg-green-50 border border-green-200 text-green-800",

@@ -30,7 +30,7 @@ const Process = () => {
   ];
 
   return (
-    <section className="bg-gray-850 py-8 px-3 sm:py-12 md:py-16 sm:px-4" style={{backgroundColor: '#1a1a1a'}}>
+    <section className="bg-gray-850 py-12 px-3 sm:py-16 md:py-20 sm:px-4 rounded-b-2xl" style={{backgroundColor: '#1a1a1a'}}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8 md:mb-12">

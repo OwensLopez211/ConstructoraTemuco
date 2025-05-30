@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\ImageService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProjectImage extends Model
 {
@@ -97,7 +99,7 @@ class ProjectImage extends Model
     public function setAsMain()
     {
         // Usar transacción para evitar problemas de concurrencia
-        \DB::transaction(function () {
+        DB::transaction(function () {
             // Quitar main de otras imágenes del mismo proyecto
             static::where('project_id', $this->project_id)
                   ->where('id', '!=', $this->id)
@@ -122,7 +124,7 @@ class ProjectImage extends Model
                 $imageService->deleteImage($image->path, $image->thumbnail_path);
             } catch (\Exception $e) {
                 // Log error pero no fallar la eliminación del registro
-                \Log::error("Error deleting image files: " . $e->getMessage());
+                Log::error("Error deleting image files: " . $e->getMessage());
             }
         });
     }
