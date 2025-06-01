@@ -11,10 +11,12 @@ import {
 } from 'lucide-react';
 import ProjectFormFields from './ProjectEditPage/ProjectFormFields';
 import ProjectImagesManager from './projects/ProjectImagesManager';
+import { useToast } from '../../components/ui/Toast/useToast';
 
 const ProjectEditPage = () => {
   const { projectId } = useParams(); // Cambio de 'id' a 'projectId' para coincidir con la ruta
   const navigate = useNavigate();
+  const { showToast } = useToast();
   
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -101,9 +103,9 @@ const ProjectEditPage = () => {
       console.log('Save response:', response); // Debug
       await loadProject(); // Recargar datos actualizados
       setEditing(false);
-      alert(response.message || 'Proyecto actualizado exitosamente');
+      showToast(response.message || 'Proyecto actualizado exitosamente', 'success');
     } catch (err) {
-      alert('Error al actualizar el proyecto: ' + err.message);
+      showToast('Error al actualizar el proyecto: ' + err.message, 'error');
     } finally {
       setSaving(false);
     }

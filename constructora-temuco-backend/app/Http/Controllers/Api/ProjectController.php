@@ -470,6 +470,61 @@ class ProjectController extends Controller
     }
 
     /**
+     * Obtener todos los proyectos activos (endpoint público)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getActiveProjects()
+    {
+        try {
+            $projects = Project::where('is_active', true)
+                ->with(['images']) // Cargar relación con imágenes
+                ->select([
+                    'id',
+                    'name', // Usar 'name' en lugar de 'title'
+                    'description',
+                    'type', // gubernamental/privado
+                    'location',
+                    'budget',
+                    'start_date',
+                    'end_date',
+                    'status',
+                    'created_at',
+                    'updated_at'
+                ])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Transformar imágenes a URL completa si es necesario, similar a la función transformProject
+            $projects->transform(function ($project) {
+                $project->images->transform(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'thumbnail_url' => $image->thumbnail_url, // Asegúrate de tener este accessor en ProjectImage
+                        'is_main' => $image->is_main,
+                    ];
+                });
+                // Incluir formatted_budget y name_type/name_status si son necesarios en el frontend público
+                 $project->append(['formatted_budget', 'type_name', 'status_name']); // Añadir accessors
+                return $project;
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $projects,
+                'total' => $projects->count()
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener los proyectos activos',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Transformar proyecto para respuesta
      */
     private function transformProject(Project $project, $detailed = false)

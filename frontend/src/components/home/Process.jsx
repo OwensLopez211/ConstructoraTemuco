@@ -39,7 +39,7 @@ const Process = () => {
               ASÍ TRABAJAMOS EN CONSTRUCTORA TEMUCO
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-3xl">
+          <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight max-w-3xl">
             Nuestro Enfoque Para Cada 
             <span className="block text-green-400">Proyecto Constructivo</span>
           </h2>
@@ -58,11 +58,6 @@ const Process = () => {
                 {/* Background Gradient Effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-green-700/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
-                {/* Step Number Badge - Responsive positioning */}
-                <div className="absolute -top-2 -right-2 sm:-top-2 sm:-right-2 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-white font-bold text-sm sm:text-base">{step.step}</span>
-                </div>
-
                 <div className="relative z-10">
                   {/* Icon */}
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md">
@@ -77,7 +72,7 @@ const Process = () => {
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 sm:mb-3 group-hover:text-green-400 transition-colors duration-300 leading-tight">
+                  <h3 className="font-display text-base sm:text-lg md:text-xl font-bold text-white mb-2 sm:mb-3 group-hover:text-green-400 transition-colors duration-300 leading-tight">
                     {step.title}
                   </h3>
                   <p className="text-gray-300 leading-relaxed text-xs sm:text-sm md:text-base">
@@ -95,7 +90,7 @@ const Process = () => {
         {/* Bottom CTA */}
         <div className="mt-8 sm:mt-12 md:mt-16 text-center">
           <div className="bg-gradient-to-r from-green-700/20 to-green-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-green-700/30">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
+            <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
               ¿Listo Para Comenzar Tu Proyecto?
             </h3>
             <p className="text-gray-300 text-xs sm:text-sm md:text-base mb-4 sm:mb-6 max-w-2xl mx-auto leading-relaxed">

@@ -1,12 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import PageTransition from '../animations/PageTransition';
 
 const ServicesSection = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      navigate(path);
+    }, 400); // Duración de la transición
+  };
 
   const services = [
     {
@@ -115,12 +124,12 @@ const ServicesSection = () => {
             animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-sm font-semibold tracking-wider uppercase">
+            <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-sm font-display font-semibold tracking-wider uppercase">
               Nuestros Servicios
             </span>
           </motion.div>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6 leading-tight">
             Diseñamos, construimos y
             <br />
             <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
@@ -128,7 +137,7 @@ const ServicesSection = () => {
             </span>
           </h2>
           
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-2">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-2 font-sans">
             Ofrecemos soluciones integrales de construcción con la más alta calidad, 
             desde proyectos residenciales hasta obras de gran envergadura.
           </p>
@@ -180,15 +189,15 @@ const ServicesSection = () => {
                 {/* Content */}
                 <div className="p-6 lg:p-8">
                   <div className="mb-4">
-                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
+                    <h3 className="text-xl lg:text-2xl font-display font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-green-600 font-semibold text-sm lg:text-base">
+                    <p className="text-green-600 font-display font-semibold text-sm lg:text-base">
                       {service.subtitle}
                     </p>
                   </div>
 
-                  <p className="text-gray-600 mb-6 leading-relaxed">
+                  <p className="text-gray-600 mb-6 leading-relaxed font-sans">
                     {service.description}
                   </p>
 
@@ -197,7 +206,7 @@ const ServicesSection = () => {
                     {service.features.map((feature, idx) => (
                       <motion.div
                         key={idx}
-                        className="flex items-center text-sm text-gray-500"
+                        className="flex items-center text-sm text-gray-500 font-sans"
                         initial={{ opacity: 0, x: -20 }}
                         animate={hoveredCard === service.id ? { opacity: 1, x: 0 } : { opacity: 0.7, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
@@ -229,10 +238,10 @@ const ServicesSection = () => {
                           path = '/servicios';
                       }
                       if (path) {
-                        navigate(path);
+                        handleNavigation(path);
                       }
                     }}
-                    className="group/btn w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                    className="group/btn w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-display font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >

@@ -46,26 +46,34 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setLoading(true);
-      
-      // Llamar al servicio de login
+
       const response = await authService.login(credentials);
-      
-      // Guardar token y usuario
-      localStorage.setItem('auth_token', response.token);
-      setToken(response.token);
-      setUser(response.user);
-      
-      return { 
-        success: true, 
-        message: response.message || 'Login exitoso',
-        user: response.user
-      };
-      
+
+      if (response.success) {
+        // Guardar token y usuario SOLO si el login fue exitoso
+        localStorage.setItem('auth_token', response.token);
+        setToken(response.token);
+        setUser(response.user);
+
+        return {
+          success: true,
+          message: response.message || 'Login exitoso',
+          user: response.user
+        };
+      } else {
+        // Si el servicio devuelve success: false (como en errores 422 con detalles)
+        // Retornar el objeto de respuesta directamente, que ya contiene success: false y los errores/mensajes
+        return response; // Esto pasará { success: false, errors: ... } o { success: false, error: ... } a LoginForm
+      }
+
     } catch (error) {
-      console.error('Login error:', error);
-      return { 
-        success: false, 
-        error: error.message || 'Error de autenticación' 
+      // Este catch se activará para errores lanzados (como 401 o errores de conexión genéricos manejados en authService)
+      console.error('Login error en AuthContext:', error); // Log más descriptivo
+
+      // Retornar un objeto de fallo con el mensaje de error
+      return {
+        success: false,
+        error: error.message || 'Error de autenticación desconocido'
       };
     } finally {
       setLoading(false);

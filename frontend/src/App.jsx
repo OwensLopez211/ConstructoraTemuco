@@ -8,7 +8,11 @@ import ToastContainer from './components/ui/Toast/ToastContainer';
 import MainLayout from "./components/MainLayout";
 import Home from "./pages/Home";
 import ContactPage from "./pages/ContactPage";
-// Importar las nuevas páginas de servicios
+// Importar las nuevas páginas
+import ServicesPage from "./pages/ServicesPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import AboutUsPage from "./pages/AboutUsPage";
+// Importar las páginas de servicios
 import PrivateProjectsPage from "./pages/PrivateProjectsPage";
 import CivilWorksPage from "./pages/CivilWorksPage";
 import PublicProjectsPage from "./pages/PublicProjectsPage";
@@ -37,6 +41,9 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="contacto" element={<ContactPage />} />
+            <Route path="servicios" element={<ServicesPage />} />
+            <Route path="proyectos" element={<ProjectsPage />} />
+            <Route path="nosotros" element={<AboutUsPage />} />
             {/* Rutas para las páginas de servicios */}
             <Route path="servicios/proyectos-privados" element={<PrivateProjectsPage />} />
             <Route path="servicios/obras-civiles" element={<CivilWorksPage />} />
@@ -47,7 +54,6 @@ function App() {
           {/* Rutas de Autenticación - Sin layout (páginas completas) */}
           <Route path="/login" element={<LoginPage />} />
 
-          
           {/* Rutas Protegidas - Admin (con AdminLayout) */}
           <Route 
             path="/admin" 

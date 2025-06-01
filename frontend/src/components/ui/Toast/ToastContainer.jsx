@@ -29,7 +29,7 @@ const ToastContainer = () => {
   window.showToast = addToast;
 
   return (
-    <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 pt-8 flex flex-col items-center space-y-2">
+    <div className="fixed top-0 left-0 right-0 z-[60] pt-8 px-4 sm:px-6 lg:px-8 max-w-sm sm:max-w-md mx-auto flex flex-col items-center space-y-2">
       {toasts.map((toast) => (
         <div key={toast.id}>
           <Toast

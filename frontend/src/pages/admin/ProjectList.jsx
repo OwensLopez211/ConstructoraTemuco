@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { projectService } from '../../services/projectService';
 import { useNavigate } from 'react-router-dom';
 import ProjectDetailsModal from '../../components/admin/projects/ProjectDetailsModal';
+import DeleteConfirmationModal from '../../components/admin/projects/DeleteConfirmationModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Eye, 
@@ -18,6 +19,7 @@ import {
   Star
 } from 'lucide-react';
 import ProjectCard from '../../components/admin/projects/ProjectCard';
+import { useToast } from '../../components/ui/Toast/useToast';
 
 const ProjectList = () => {
   const navigate = useNavigate();
@@ -37,6 +39,13 @@ const ProjectList = () => {
   const [meta, setMeta] = useState({});
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  
+  // Estados para el modal de eliminación
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+
+  // Usar el hook useToast
+  const { showToast } = useToast();
 
   // Cargar proyectos del backend
   const loadProjects = useCallback(async (filters = {}) => {
@@ -76,7 +85,6 @@ const ProjectList = () => {
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, filterType, filterStatus, loadProjects]);
-
 
   const getTypeConfig = (type) => ({
     gubernamental: { 
@@ -155,19 +163,37 @@ const ProjectList = () => {
     }).format(amount);
   };
 
-  // Manejar eliminación de proyecto
-  const handleDeleteProject = async (projectId) => {
-    if (!window.confirm('¿Estás seguro de que quieres eliminar este proyecto?')) {
-      return;
+  // Función para iniciar el proceso de eliminación
+  const handleDeleteProject = (projectId) => {
+    const project = projects.find(p => p.id === projectId);
+    if (project) {
+      setProjectToDelete(project);
+      setIsDeleteModalOpen(true);
     }
+  };
 
+  // Función para confirmar la eliminación
+  const confirmDeleteProject = async () => {
+    if (!projectToDelete) return;
+    
     try {
-      await projectService.deleteProject(projectId);
+      await projectService.deleteProject(projectToDelete.id);
       loadProjects();
-      alert('Proyecto eliminado exitosamente');
+      
+      // Mostrar mensaje de éxito (puedes usar tu sistema de toasts aquí)
+      showToast('Proyecto eliminado exitosamente', 'success');
+      
     } catch (err) {
-      alert(`Error al eliminar proyecto: ${err.message}`);
+      console.error('Error al eliminar proyecto:', err);
+      showToast(`Error al eliminar proyecto: ${err.message}`, 'error');
+      throw err; // Re-throw para que el modal maneje el estado de loading
     }
+  };
+
+  // Función para cerrar el modal de eliminación
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setProjectToDelete(null);
   };
 
   // Manejar cambio de estado activo/inactivo
@@ -380,7 +406,7 @@ const ProjectList = () => {
           </motion.div>
         )}
 
-        {/* Table View (Manteniendo la vista de tabla original) */}
+        {/* Table View */}
         {viewMode === 'table' && (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -477,7 +503,7 @@ const ProjectList = () => {
                     aria-current={pagination.current_page === pageNumber ? 'page' : undefined}
                     className={`relative inline-flex items-center px-4 py-2 border-r border-gray-200 text-sm font-medium transition-colors duration-200 ${
                       pagination.current_page === pageNumber
-                        ? 'z-10 bg-blue-50 text-blue-600 font-semibold'
+                        ? 'z-10 bg-green-50 text-green-600 font-semibold'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -507,6 +533,14 @@ const ProjectList = () => {
           onClose={handleCloseDetailsModal}
         />
       )}
+
+      {/* Modal de Confirmación de Eliminación */}
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={confirmDeleteProject}
+        projectName={projectToDelete?.name || ''}
+      />
     </div>
   );
 };

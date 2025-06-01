@@ -55,16 +55,16 @@ const BeforeAfterSlider = () => {
         
         {/* Header original */}
         <div className="text-center mb-12 md:mb-8">
-          <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-sm font-semibold tracking-wider uppercase mb-4 block">
+          <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-sm font-display font-semibold tracking-wider uppercase mb-4 block">
             Nuestros Resultados
           </span>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6">
             Trabajos de 
             <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"> calidad</span>
           </h2>
           
-          <p className="text-lg md:text-xl text-gray-600">
+          <p className="text-lg md:text-xl text-gray-600 font-sans">
             A particulares y empresas
           </p>
         </div>
@@ -78,7 +78,7 @@ const BeforeAfterSlider = () => {
                 setCurrentProject(index);
                 setSliderPosition(50);
               }}
-              className={`px-4 py-2 text-xs md:text-sm font-medium rounded-full transition-all duration-200 ${
+              className={`px-4 py-2 text-xs md:text-sm font-display font-medium rounded-full transition-all duration-200 ${
                 currentProject === index
                   ? 'bg-gray-900 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -137,12 +137,12 @@ const BeforeAfterSlider = () => {
 
               {/* Etiquetas sutiles */}
               <div className="absolute top-3 left-3 z-20">
-                <span className="bg-black/60 text-white px-2 py-1 rounded text-xs font-medium backdrop-blur-sm">
+                <span className="bg-black/60 text-white px-2 py-1 rounded text-xs font-display font-medium backdrop-blur-sm">
                   Antes
                 </span>
               </div>
               <div className="absolute top-3 right-3 z-20">
-                <span className="bg-black/60 text-white px-2 py-1 rounded text-xs font-medium backdrop-blur-sm">
+                <span className="bg-black/60 text-white px-2 py-1 rounded text-xs font-display font-medium backdrop-blur-sm">
                   Después
                 </span>
               </div>

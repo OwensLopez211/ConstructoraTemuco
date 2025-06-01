@@ -1,55 +1,49 @@
 import React from 'react';
 import HeaderPage from '../components/main/HeaderPage';
-import TrustSection from '../components/services/TrustSection'; // Ajusta la ruta según tu estructura
+import TrustSection from '../components/services/TrustSection';
+import PageTransition from '../components/animations/PageTransition';
 
 const CivilWorksPage = () => {
-  
-  // Función para manejar el clic del botón
   const handleContactClick = () => {
-    // Puedes agregar navegación o modal de contacto aquí
     console.log("Redirigir a contacto para obras civiles");
-    // Por ejemplo: navigate('/contacto');
   };
 
   return (
-    <div>
-      {/* Header con imagen de obras civiles */}
-      <HeaderPage
-        title="Obras Civiles"
-        subtitle="Ejecución de obras civiles formato llave en mano"
-        backgroundImage="/Maquinaria-Pesada.jpg"
-        height="h-[500px]"
-        overlay="bg-black/50"
-        titleSize="text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
-      />
+    <PageTransition variant="slide">
+      <div>
+        {/* Header con imagen de obras civiles */}
+        <HeaderPage
+          title="Obras Civiles"
+          backgroundImage="/Infraestructura.jpg"
+          height="h-[400px]"
+          overlay="bg-black/40"
+          subtitle="Construcción de infraestructura vital para el desarrollo de comunidades"
+          titleSize="text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+        />
 
-      {/* Sección de confianza para obras civiles */}
-      <TrustSection 
-        title="Especialistas en obras civiles"
-        image="/Maquinaria_pesada.jpg" // Imagen de maquinaria trabajando
-        imageAlt="Maquinaria pesada realizando obras civiles"
-        buttonText="CONTÁCTANOS"
-        onButtonClick={handleContactClick}
-        customContent={
-          <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
-            <p>
-              Ejecutamos proyectos llame en mano, para personas naturales y empresas.
-            </p>
-            
-            <p>
-              En este tipo de proyectos nos encargamos de todos los tramites para realizar la obra, cumpliendo con los documentos técnicos para poder ejecutar la obra hasta la finalización de esta.
-            </p>
-            
-            <p>
-            Entre las características principales de este tipo de trabajos destacamos:
-            <li>Precio fijo detallado al inicio del proyecto.</li> 
-            <li>Diseño y construcción.</li>  
-            <li>Obra completa y terminada, llegar y utilizar.</li> 
-            </p>
-          </div>
-        }
-      />
-    </div>
+        {/* Sección de confianza para obras civiles */}
+        <TrustSection 
+          title="Obras civiles"
+          image="/Public-Obra.jpg"
+          imageAlt="Obras civiles de construcción"
+          buttonText="CONTÁCTANOS"
+          onButtonClick={handleContactClick}
+          customContent={
+            <div className="space-y-6 text-gray-600 text-lg leading-relaxed font-sans">
+              <p>
+                Desarrollamos proyectos de infraestructura pública que mejoran la calidad de vida 
+                de las comunidades, con un enfoque en la sostenibilidad y la innovación.
+              </p>
+            </div>
+          }
+          stats={[
+            { number: "50+", label: "Proyectos Completados", color: "text-green-600" },
+            { number: "100%", label: "Cumplimiento", color: "text-blue-600" },
+            { number: "20+", label: "Años de Experiencia", color: "text-orange-600" }
+          ]}
+        />
+      </div>
+    </PageTransition>
   );
 };
 

@@ -36,10 +36,10 @@ const Footer = () => {
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-4 sm:mb-6">
                 <img src="/LogoNav.png" alt="Constructora Temuco Logo" className="w-12" />
-                <h3 className="text-xl sm:text-2xl font-bold">Constructora Temuco</h3>
+                <h3 className="text-xl sm:text-2xl font-display font-bold">Constructora Temuco</h3>
               </div>
               
-              <p className="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base max-w-md">
+              <p className="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base max-w-md font-sans">
                 Más de 15 años construyendo sueños en Temuco y la Región de La Araucanía. 
                 Especialistas en construcción residencial y comercial con los más altos 
                 estándares de calidad y compromiso.
@@ -58,35 +58,35 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-lg font-semibold mb-4 sm:mb-6">Enlaces Rápidos</h4>
+              <h4 className="text-lg font-display font-semibold mb-4 sm:mb-6">Enlaces Rápidos</h4>
               <ul className="space-y-3">
                 <li>
-                  <a href="/" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="/" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Inicio
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Sobre Nosotros
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Servicios
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Proyectos
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Contacto
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Cotización
                   </a>
                 </li>
@@ -95,12 +95,12 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div>
-              <h4 className="text-lg font-semibold mb-4 sm:mb-6">Contacto</h4>
+              <h4 className="text-lg font-display font-semibold mb-4 sm:mb-6">Contacto</h4>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <MapPin className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-gray-300 text-sm sm:text-base">
+                    <p className="text-gray-300 text-sm sm:text-base font-sans">
                       Volcán Calbuco 345
                     </p>
                   </div>
@@ -108,14 +108,14 @@ const Footer = () => {
                 
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-green-400 flex-shrink-0" />
-                  <a href="tel:+56 45 2 810749" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="tel:+56 45 2 810749" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     +56 45 2 810749
                   </a>
                 </div>
                 
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-green-400 flex-shrink-0" />
-                  <a href="mailto:contacto@ctemuco.cl" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base">
+                  <a href="mailto:contacto@ctemuco.cl" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     contacto@ctemuco.cl
                   </a>
                 </div>
@@ -123,7 +123,7 @@ const Footer = () => {
                 <div className="flex items-start space-x-3">
                   <Clock className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-gray-300 text-sm sm:text-base">
+                    <p className="text-gray-300 text-sm sm:text-base font-sans">
                       Lun - Vie: 8:00 - 18:00<br />
                     </p>
                   </div>
@@ -136,18 +136,18 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 py-6 sm:py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <div className="text-gray-400 text-sm text-center sm:text-left">
+            <div className="text-gray-400 text-sm text-center sm:text-left font-sans">
               © {new Date().getFullYear()} Constructora Temuco. Todos los derechos reservados.
             </div>
             
             <div className="flex flex-wrap justify-center sm:justify-end space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
                 Política de Privacidad
               </a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
                 Términos de Servicio
               </a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
                 Mapa del Sitio
               </a>
             </div>

@@ -1,6 +1,6 @@
 const ContactWhyChoose = () => {
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 border-0 shadow-xl">
+    <div className="bg-gray-100 rounded-3xl p-6 border-0 shadow-xl">
       <h3 className="text-lg font-bold text-gray-900 mb-4">¿Por qué elegirnos?</h3>
       <div className="space-y-3">
         <div className="flex items-start space-x-3">

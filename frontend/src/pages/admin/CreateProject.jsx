@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronLeft, Check, AlertCircle, Plus, Calendar, DollarSign, MapPin, User, FileText, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { projectService } from '../../services/projectService';
+ import { useToast } from '../../components/ui/Toast/useToast';
 
 // Componente principal CreateProject
 const CreateProject = () => {
@@ -9,6 +10,7 @@ const CreateProject = () => {
   const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate();
+  const { showToast } = useToast();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -110,7 +112,7 @@ const CreateProject = () => {
         console.log('Proyecto creado exitosamente!', createProjectResponse.data); // Log de éxito de la API
         const projectId = createProjectResponse.data.id; // <-- Obtener el ID del proyecto creado
 
-        alert(createProjectResponse.message || 'Proyecto creado exitosamente!'); // Siempre mostrar mensaje de éxito del proyecto
+        showToast(createProjectResponse.message || 'Proyecto creado exitosamente!', 'success');
 
         // 3. Navegar al menú de proyectos después de crear
         navigate('/admin/proyectos');
@@ -118,12 +120,12 @@ const CreateProject = () => {
       } else {
         // Esto se maneja principalmente en el catch, pero como fallback:
         console.error('Error al crear proyecto (API reporta false success):', createProjectResponse.message);
-        alert(createProjectResponse.message || 'Error al crear proyecto');
+        showToast(createProjectResponse.message || 'Error al crear proyecto', 'error');
       }
 
     } catch (error) {
       console.error('Error en el proceso de creación:', error); // Ajustar log y mensaje
-      alert(`Error en el proceso: ${error.message}`); // Mostrar error al usuario
+      showToast(`Error en el proceso: ${error.message}`, 'error');
     } finally {
       setLoading(false);
     }

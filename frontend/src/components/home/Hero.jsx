@@ -39,7 +39,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 mb-8 max-w-2xl"
+          className="text-lg md:text-xl lg:text-2xl font-display font-semibold text-gray-800 mb-8 max-w-2xl"
         >
           Construimos para darle valor a tus proyectos
         </motion.p>
@@ -71,8 +71,8 @@ const Hero = () => {
                   <path fillRule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-wide">CONSTRUCTORA</h2>
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mt-1">TEMUCO</h1>
+              <h2 className="text-2xl md:text-3xl font-display font-black text-gray-900 tracking-wide">CONSTRUCTORA</h2>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-gray-900 mt-1">TEMUCO</h1>
               <div className="w-32 h-2 bg-green-600 mt-3 rounded-full"></div>
             </div>
           </div>
@@ -86,7 +86,7 @@ const Hero = () => {
           whileHover={{ y: -2, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           href="#contact"
-          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none"
+          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-display font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none"
         >
           CONTÁCTANOS
         </motion.a>

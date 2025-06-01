@@ -21,6 +21,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+// Ruta pública para proyectos activos
+Route::get('/projects/public', [ProjectController::class, 'getActiveProjects']);
+
 // Rutas protegidas por autenticación
 Route::middleware('auth:sanctum')->group(function () {
     // Rutas de usuario autenticado

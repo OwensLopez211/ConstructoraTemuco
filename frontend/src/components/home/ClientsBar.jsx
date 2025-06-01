@@ -70,11 +70,11 @@ const ClientsBar = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-gray-900 mb-2">
             Empresas que <span className="text-green-600">Confían en Nosotros</span>
           </h2>
           
-          <p className="text-gray-600 text-sm max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm max-w-2xl mx-auto font-sans">
             Hemos tenido el honor de trabajar con organizaciones líderes en Chile, 
             construyendo relaciones duraderas basadas en la calidad y confianza.
           </p>
@@ -108,7 +108,7 @@ const ClientsBar = () => {
                           {client.name.charAt(0)}
                         </span>
                       </div>
-                      <div className="text-xs font-medium text-gray-700 truncate">
+                      <div className="text-xs font-sans font-medium text-gray-700 truncate">
                         {client.name.length > 12 ? client.name.substring(0, 12) + '...' : client.name}
                       </div>
                     </div>

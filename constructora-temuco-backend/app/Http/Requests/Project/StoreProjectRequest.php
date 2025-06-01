@@ -24,7 +24,7 @@ class StoreProjectRequest extends FormRequest
             'type' => ['required', 'in:' . implode(',', array_keys(Project::TYPES))],
             'status' => ['nullable', 'in:' . implode(',', array_keys(Project::STATUSES))],
             'location' => ['required', 'string', 'max:255'],
-            'budget' => ['nullable', 'numeric', 'min:0', 'max:999999999999.99'],
+            'budget' => ['nullable', 'numeric', 'min:0', 'max:9999999999999999999999999999.99'],
             'start_date' => ['nullable', 'date', 'after_or_equal:2020-01-01'],
             'end_date' => ['nullable', 'date', 'after:start_date'],
             'estimated_end_date' => ['nullable', 'date', 'after:start_date'],

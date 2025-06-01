@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import LoginForm from '../components/auth/LoginForm'; // Cambio: sin destructuring
+import LoginForm from '../components/auth/LoginForm';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -15,47 +15,34 @@ const LoginPage = () => {
     }
   }, [isAuthenticated, loading, navigate]);
 
-  // No mostrar la página si está cargando o ya autenticado
+  // Mostrar loading spinner mejorado
   if (loading || isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          {/* Spinner más elegante */}
+          <div className="relative">
+            <div className="w-12 h-12 rounded-full border-4 border-blue-200"></div>
+            <div className="w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin absolute top-0 left-0"></div>
+          </div>
+          <p className="text-sm text-gray-600 font-medium">Verificando autenticación...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Logo de la empresa */}
-        <div className="text-center">
-          <img
-            className="mx-auto h-12 w-auto"
-            src="/logo-constructora.png"
-            alt="Constructora Temuco"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-          <h1 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Constructora Temuco
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Panel Administrativo
-          </p>
-        </div>
-
-        {/* Formulario de login */}
-        <LoginForm />
-
-        {/* Footer */}
-        <div className="text-center">
-          <p className="text-xs text-gray-500">
-            © 2024 Constructora Temuco. Todos los derechos reservados.
-          </p>
-        </div>
+    <>
+      {/* El LoginForm ahora maneja todo el layout, incluyendo el fondo */}
+      <LoginForm />
+      
+      {/* Footer absoluto en la parte inferior */}
+      <div className="fixed bottom-0 left-0 right-0 text-center py-4 bg-gradient-to-t from-white/80 to-transparent backdrop-blur-sm">
+        <p className="text-xs text-gray-500">
+          © 2024 Constructora Temuco. Todos los derechos reservados.
+        </p>
       </div>
-    </div>
+    </>
   );
 };
 

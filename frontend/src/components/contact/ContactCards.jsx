@@ -4,7 +4,7 @@ const ContactCards = () => {
   return (
     <div className="grid md:grid-cols-3 gap-4 mb-6 items-stretch">
       <div className="h-full flex flex-col justify-between">
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
+        <div className="bg-gray-100 rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
           <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center mb-2">
             <Phone className="w-5 h-5 text-green-600" />
           </div>
@@ -13,7 +13,7 @@ const ContactCards = () => {
         </div>
       </div>
       <div className="h-full flex flex-col justify-between">
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
+        <div className="bg-gray-100 rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
           <div className="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center mb-2">
             <Mail className="w-5 h-5 text-emerald-600" />
           </div>
@@ -22,7 +22,7 @@ const ContactCards = () => {
         </div>
       </div>
       <div className="h-full flex flex-col justify-between">
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
+        <div className="bg-gray-100 rounded-2xl p-4 border-0 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col items-center text-center">
           <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center mb-2">
             <Clock className="w-5 h-5 text-green-600" />
           </div>

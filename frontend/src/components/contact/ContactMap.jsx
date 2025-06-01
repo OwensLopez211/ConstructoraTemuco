@@ -2,7 +2,7 @@ import { MapPin } from 'lucide-react';
 
 const ContactMap = () => {
   return (
-    <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 border-0 shadow-xl">
+    <div className="bg-gray-100 rounded-3xl p-6 border-0 shadow-xl">
       <div className="flex items-center space-x-2 mb-4">
         <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
           <MapPin className="w-4 h-4 text-white" />
@@ -13,7 +13,7 @@ const ContactMap = () => {
         <iframe
           src="https://www.google.com/maps?q=Volcán+Calbuco+345,+Temuco,+Chile&output=embed"
           width="100%"
-          height="140"
+          height="500"
           style={{ border: 0 }}
           allowFullScreen=""
           loading="lazy"

@@ -94,11 +94,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 group">
               <Phone className="w-4 h-4 text-green-200 group-hover:text-white transition-colors" />
-              <span className="text-sm font-medium">+56 45 2 810749</span>
+              <span className="text-sm font-sans font-medium">+56 45 2 810749</span>
             </div>
             <div className="flex items-center space-x-2 group">
               <Mail className="w-4 h-4 text-green-200 group-hover:text-white transition-colors" />
-              <span className="text-sm font-medium">contacto@ctemuco.cl</span>
+              <span className="text-sm font-sans font-medium">contacto@ctemuco.cl</span>
             </div>
           </div>
           
@@ -106,11 +106,11 @@ const Navbar = () => {
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <Clock className="w-4 h-4 text-green-200" />
-              <span className="text-sm font-medium">Lun - Vie 8:00 AM - 6:00 PM</span>
+              <span className="text-sm font-sans font-medium">Lun - Vie 8:00 AM - 6:00 PM</span>
             </div>
             <motion.button
               onClick={() => handleNavigation('/contacto')}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-semibold border border-white/20 transition-all duration-300"
+              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-display font-semibold border border-white/20 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -140,7 +140,7 @@ const Navbar = () => {
                 <button
                   key={item.id}
                   onClick={() => handleNavigation(item)}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 group ${
+                  className={`relative px-4 py-2 text-sm font-display font-medium rounded-lg transition-all duration-300 group ${
                     activeTab === item.id
                       ? "text-green-600 bg-green-50" 
                       : "text-gray-700 hover:text-green-600 hover:bg-gray-50"
@@ -192,7 +192,7 @@ const Navbar = () => {
                 >
                   <button
                     onClick={() => handleNavigation(item)}
-                    className={`w-full text-left py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    className={`w-full text-left py-3 px-4 rounded-xl text-sm font-display font-medium transition-all duration-200 ${
                       activeTab === item.id
                         ? "text-green-600 bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-600" 
                         : "text-gray-700 hover:text-green-600 hover:bg-gray-50"
@@ -212,7 +212,7 @@ const Navbar = () => {
               >
                 <button 
                   onClick={() => handleNavigation('/contacto')}
-                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300"
+                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-xl text-sm font-display font-semibold shadow-lg transition-all duration-300"
                 >
                   Contáctanos Hoy
                 </button>
@@ -229,13 +229,13 @@ const Navbar = () => {
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                     <Phone className="w-4 h-4 text-green-600" />
                   </div>
-                  <span className="text-sm font-medium">+56 45 2 810749</span>
+                  <span className="text-sm font-sans font-medium">+56 45 2 810749</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-600">
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Mail className="w-4 h-4 text-blue-600" />
                   </div>
-                  <span className="text-sm font-medium">contacto@ctemuco.cl</span>
+                  <span className="text-sm font-sans font-medium">contacto@ctemuco.cl</span>
                 </div>
               </motion.div>
             </nav>
