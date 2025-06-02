@@ -13,7 +13,7 @@ const ContactPage = () => {
       <HeaderPage
         title="Hablemos"
         subtitle="¿Tienes un proyecto en mente? Nos encantaría escucharte y ayudarte a convertir tus ideas en realidad."
-        backgroundImage="/Infraestructura.jpg"
+        backgroundImage="/ContactHeader.jpg"
         height="h-[400px]"
         overlay="bg-black/40"
         titleSize="text-2xl md:text-3xl lg:text-4xl xl:text-5xl"

@@ -25,7 +25,7 @@ const ProjectsPage = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('http://localhost:8000/api/projects/public');
+        const response = await fetch('https://ctemuco.cl/api/projects/public');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

@@ -89,8 +89,8 @@ export const validators = {
   export const constants = {
     // URLs de la API
     api: {
-      baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
-      appUrl: import.meta.env.VITE_APP_URL || 'http://localhost:8000',
+      baseUrl: import.meta.env.VITE_API_URL || 'https://ctemuco.cl/api',
+      appUrl: import.meta.env.VITE_APP_URL || 'https://ctemuco.cl/api',
     },
   
     // Configuración de la aplicación
