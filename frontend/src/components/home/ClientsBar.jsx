@@ -2,48 +2,48 @@ import React from 'react';
 import { motion } from "framer-motion";
 
 const ClientsBar = () => {
-  // Array de clientes con logos y nombres
+  // Array de clientes con logos reales
   const clients = [
     {
       id: 1,
-      name: "Banco Estado",
-      logo: "https://logos-world.net/wp-content/uploads/2021/02/BancoEstado-Logo.png"
+      name: "CCHC",
+      logo: "/logoswebp/Logo-CCHC.webp"
     },
     {
       id: 2,
-      name: "Municipalidad de Temuco",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Escudo_de_Temuco.svg/200px-Escudo_de_Temuco.svg.png"
+      name: "Constructora del Bosque",
+      logo: "/logoswebp/Logo-Constructora-del-Bosque.webp"
     },
     {
       id: 3,
-      name: "Universidad de La Frontera",
-      logo: "https://seeklogo.com/images/U/universidad-de-la-frontera-logo-8B5B5B5B5B-seeklogo.com.png"
+      name: "Costa Araucanía",
+      logo: "/logoswebp/Logo-Costa-Araucania.webp"
     },
     {
       id: 4,
-      name: "Arauco",
-      logo: "https://logos-world.net/wp-content/uploads/2021/11/Arauco-Logo.png"
+      name: "Dubois",
+      logo: "/logoswebp/Logo-Dubois.webp"
     },
     {
       id: 5,
-      name: "Copec",
-      logo: "https://seeklogo.com/images/C/copec-logo-8B5B5B5B5B-seeklogo.com.png"
+      name: "Municipalidad de Curarrehue",
+      logo: "/logoswebp/Logo-Municipalidad-Curarrehue.webp"
     },
     {
       id: 6,
-      name: "Falabella",
-      logo: "https://logos-world.net/wp-content/uploads/2020/12/Falabella-Logo.png"
+      name: "Municipalidad de Villarrica",
+      logo: "/logoswebp/Logo-Municipalidad-Villarrica.webp"
     },
     {
       id: 7,
-      name: "Ripley",
-      logo: "https://seeklogo.com/images/R/ripley-logo-8B5B5B5B5B-seeklogo.com.png"
+      name: "Servicio de Salud",
+      logo: "/logoswebp/Logo-Servicio-Salud.webp"
     },
     {
       id: 8,
-      name: "Walmart Chile",
-      logo: "https://logos-world.net/wp-content/uploads/2020/09/Walmart-Logo.png"
-    }
+      name: "Plaengue",
+      logo: "/logoswebp/Logo-Plaenge.webp"
+    },
   ];
 
   // Duplicamos el array para crear el efecto de scroll infinito
@@ -101,8 +101,19 @@ const ClientsBar = () => {
                   className="flex-shrink-0 w-40 h-20 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center p-4 hover:shadow-md hover:scale-105 transition-all duration-300 group"
                 >
                   <div className="w-full h-full flex items-center justify-center">
-                    {/* Placeholder para logos - puedes reemplazar con imágenes reales */}
-                    <div className="text-center">
+                    <img
+                      src={client.logo}
+                      alt={`Logo de ${client.name}`}
+                      className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                      loading="lazy"
+                      onError={(e) => {
+                        // Fallback en caso de que la imagen no cargue
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                      }}
+                    />
+                    {/* Fallback text - solo se muestra si la imagen falla */}
+                    <div className="hidden text-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-1 mx-auto group-hover:scale-110 transition-transform duration-300">
                         <span className="text-white font-bold text-lg">
                           {client.name.charAt(0)}
@@ -116,6 +127,13 @@ const ClientsBar = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Mobile touch hint */}
+          <div className="md:hidden text-center mt-4">
+            <p className="text-xs text-gray-500">
+              Desliza para ver más clientes
+            </p>
           </div>
         </div>
       </div>

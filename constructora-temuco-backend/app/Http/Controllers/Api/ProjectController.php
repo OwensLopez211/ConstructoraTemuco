@@ -379,35 +379,39 @@ class ProjectController extends Controller
     {
         try {
             $user = $request->user();
-            $query = Project::query();
-            $userFilteredQuery = clone $query;
 
-            if (!$user->isManager()) {
-                $userFilteredQuery->where('user_id', $user->id);
-            }
+            // Helper function para crear query base
+            $getBaseQuery = function() use ($user) {
+                $query = Project::query();
+                if (!$user->isManager()) {
+                    $query->where('user_id', $user->id);
+                }
+                return $query;
+            };
 
             $stats = [
                 'total_projects' => Project::count(),
                 'active_projects' => Project::active()->count(),
+
                 'by_status' => [
-                    'planificacion' => $userFilteredQuery->byStatus('planificacion')->count(),
-                    'en_progreso' => $userFilteredQuery->byStatus('en_progreso')->count(),
-                    'pausado' => $userFilteredQuery->byStatus('pausado')->count(),
-                    'completado' => $userFilteredQuery->byStatus('completado')->count(),
-                    'cancelado' => $userFilteredQuery->byStatus('cancelado')->count(),
+                    'planificacion' => $getBaseQuery()->byStatus('planificacion')->count(),
+                    'en_progreso' => $getBaseQuery()->byStatus('en_progreso')->count(),
+                    'pausado' => $getBaseQuery()->byStatus('pausado')->count(),
+                    'completado' => $getBaseQuery()->byStatus('completado')->count(),
+                    'cancelado' => $getBaseQuery()->byStatus('cancelado')->count(),
                 ],
                 'by_type' => [
-                    'gubernamental' => $userFilteredQuery->byType('gubernamental')->count(),
-                    'privado' => $userFilteredQuery->byType('privado')->count(),
+                    'gubernamental' => $getBaseQuery()->byType('gubernamental')->count(),
+                    'privado' => $getBaseQuery()->byType('privado')->count(),
                 ],
                 'budget_stats' => [
-                    'total_budget' => $userFilteredQuery->sum('budget'),
-                    'average_budget' => $userFilteredQuery->avg('budget'),
-                    'completed_budget' => $userFilteredQuery->byStatus('completado')->sum('budget'),
+                    'total_budget' => $getBaseQuery()->sum('budget'),
+                    'average_budget' => $getBaseQuery()->avg('budget'),
+                    'completed_budget' => $getBaseQuery()->byStatus('completado')->sum('budget'),
                 ],
-                'overdue_projects' => $userFilteredQuery->where('estimated_end_date', '<', now())
-                                           ->whereNotIn('status', ['completado', 'cancelado'])
-                                           ->count(),
+                'overdue_projects' => $getBaseQuery()->where('estimated_end_date', '<', now())
+                                        ->whereNotIn('status', ['completado', 'cancelado'])
+                                        ->count(),
             ];
 
             return response()->json([
@@ -423,7 +427,6 @@ class ProjectController extends Controller
             ], 500);
         }
     }
-
     /**
      * Obtener opciones para formularios (tipos, estados, usuarios)
      */

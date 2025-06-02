@@ -34,19 +34,21 @@ const Footer = () => {
             
             {/* Company Info */}
             <div className="lg:col-span-2">
-              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
-                <img src="/LogoNav.png" alt="Constructora Temuco Logo" className="w-12" />
-                <h3 className="text-xl sm:text-2xl font-display font-bold">Constructora Temuco</h3>
+              <div className="flex items-center justify-center sm:justify-start mb-6">
+                <img 
+                  src="/LogoNav.png" 
+                  alt="Constructora Temuco Logo" 
+                  className="w-24 sm:w-28 md:w-32 h-auto rounded-lg"
+                />
               </div>
               
-              <p className="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base max-w-md font-sans">
-                Más de 15 años construyendo sueños en Temuco y la Región de La Araucanía. 
-                Especialistas en construcción residencial y comercial con los más altos 
-                estándares de calidad y compromiso.
+              <p className="text-gray-300 leading-relaxed mb-6 text-sm sm:text-base max-w-md font-sans text-center sm:text-left text-justify">
+                Más de 8 años construyendo sueños en Temuco y la Región de la Araucanía.
+                Especialistas en construcciones privadas y publicas con los más altos estándares de calidad y compromiso.
               </p>
               
               {/* Social Media */}
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 justify-center sm:justify-start">
                 <a href="https://www.facebook.com/profile.php?id=100054373234943" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-300 group">
                   <Facebook className="w-5 h-5 text-gray-300 group-hover:text-white" />
                 </a>
@@ -83,11 +85,6 @@ const Footer = () => {
                 <li>
                   <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
                     Contacto
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
-                    Cotización
                   </a>
                 </li>
               </ul>

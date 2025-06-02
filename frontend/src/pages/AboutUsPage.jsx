@@ -2,35 +2,9 @@ import React from 'react';
 import HeaderPage from '../components/main/HeaderPage';
 import PageTransition from '../components/animations/PageTransition';
 import { motion } from 'framer-motion';
-import { Award, Users, Building2, Clock } from 'lucide-react';
+import { Target, Eye, Award, Lightbulb, Heart } from 'lucide-react';
 
 const AboutUsPage = () => {
-  const stats = [
-    {
-      icon: Award,
-      number: "15+",
-      label: "Años de Experiencia",
-      description: "Construyendo sueños en la Región de La Araucanía"
-    },
-    {
-      icon: Users,
-      number: "100+",
-      label: "Proyectos Completados",
-      description: "Satisfaciendo las necesidades de nuestros clientes"
-    },
-    {
-      icon: Building2,
-      number: "50+",
-      label: "Clientes Satisfechos",
-      description: "Construyendo relaciones duraderas"
-    },
-    {
-      icon: Clock,
-      number: "24/7",
-      label: "Soporte",
-      description: "Siempre disponibles para nuestros clientes"
-    }
-  ];
 
   return (
     <PageTransition variant="slide">
@@ -49,20 +23,15 @@ const AboutUsPage = () => {
         <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Imagen */}
-              <motion.div
+              {/* Logo */}
+              <motion.img
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                className="relative rounded-2xl overflow-hidden shadow-xl"
-              >
-                <img
-                  src="/LogoNav2.png"
-                  alt="Constructora Temuco"
-                  className="w-full h-64 md:h-80 lg:h-96 object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </motion.div>
+                src="/Logo-Const-Temuco_2.webp"
+                alt="Constructora Temuco"
+                className="w-[70%] h-auto object-contain object-center rounded-2xl shadow-xl mx-auto"
+              />
 
               {/* Contenido */}
               <motion.div
@@ -90,41 +59,69 @@ const AboutUsPage = () => {
             </div>
           </div>
         </section>
-        
-        {/* Valores */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+
+        {/* Misión y Visión */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-green-50">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-display font-bold text-center text-gray-900 mb-12">
-              Nuestros Valores
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-4">
-                  Excelencia
-                </h3>
-                <p className="text-gray-600 font-sans">
-                  Nos comprometemos a entregar la más alta calidad en cada proyecto, 
-                  superando las expectativas de nuestros clientes.
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl font-display font-bold text-gray-900 mb-4">
+                Misión y Visión
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Conoce nuestro propósito y hacia dónde nos dirigimos como empresa
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Misión */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-display font-bold text-gray-900">
+                    Misión
+                  </h3>
+                </div>
+                <p className="text-gray-600 font-sans leading-relaxed">
+                  Otorgar un servicio constructivo integral, diseñando y ejecutando soluciones para satisfacer 
+                  las necesidades que los proyectos de nuestros clientes requieren.
                 </p>
-              </div>
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-4">
-                  Innovación
-                </h3>
-                <p className="text-gray-600 font-sans">
-                  Buscamos constantemente nuevas soluciones y tecnologías para mejorar 
-                  nuestros procesos y resultados.
+              </motion.div>
+
+              {/* Visión */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4">
+                    <Eye className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-display font-bold text-gray-900">
+                    Visión
+                  </h3>
+                </div>
+                <p className="text-gray-600 font-sans leading-relaxed">
+                  Crecer de manera orgánica y sostenible en el mercado de la construcción de proyectos 
+                  públicos y privados, con un portafolio balanceado entre ambas áreas de negocio.
                 </p>
-              </div>
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-xl font-display font-bold text-gray-900 mb-4">
-                  Compromiso
-                </h3>
-                <p className="text-gray-600 font-sans">
-                  Trabajamos con dedicación y responsabilidad, cumpliendo con los plazos 
-                  y presupuestos establecidos.
-                </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -133,4 +130,4 @@ const AboutUsPage = () => {
   );
 };
 
-export default AboutUsPage; 
+export default AboutUsPage;

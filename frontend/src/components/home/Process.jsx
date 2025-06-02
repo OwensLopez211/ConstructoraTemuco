@@ -86,27 +86,6 @@ const Process = () => {
             );
           })}
         </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-8 sm:mt-12 md:mt-16 text-center">
-          <div className="bg-gradient-to-r from-green-700/20 to-green-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-green-700/30">
-            <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-              ¿Listo Para Comenzar Tu Proyecto?
-            </h3>
-            <p className="text-gray-300 text-xs sm:text-sm md:text-base mb-4 sm:mb-6 max-w-2xl mx-auto leading-relaxed">
-              Nuestro equipo está preparado para llevar tu visión a la realidad con 
-              el más alto nivel de profesionalismo y calidad.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
-              <button className="bg-green-700 hover:bg-green-600 text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-md font-semibold transition-all duration-300 hover:scale-105 text-xs sm:text-sm">
-                Solicitar Cotización
-              </button>
-              <button className="border-2 border-gray-500 hover:border-green-700 text-white hover:text-green-400 px-5 py-2.5 sm:px-6 sm:py-3 rounded-md font-semibold transition-all duration-300 text-xs sm:text-sm">
-                Ver Proyectos
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
