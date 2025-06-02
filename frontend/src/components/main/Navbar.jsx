@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Phone, Mail, Clock, Menu, X } from "lucide-react";
+import { Phone, Mail, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
@@ -17,16 +17,6 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-
-  // Detectar scroll para cambiar el estilo del navbar
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const navigationItems = [
     { id: "inicio", label: "Inicio", path: "/" },
@@ -64,6 +54,28 @@ const Navbar = () => {
     const currentPath = location.pathname;
     const currentHash = location.hash;
 
+    // Verificar si estamos en páginas de servicios
+    if (currentPath.startsWith('/servicios/')) {
+      return "servicios";
+    }
+
+    // Verificar si estamos en la sección servicios (#servicios) o si detectamos que estamos en esa sección
+    if (currentHash === '#servicios') {
+      return "servicios";
+    }
+
+    // Detectar si estamos en la sección servicios por scroll en la página principal
+    if (currentPath === '/' && !currentHash) {
+      const serviciosElement = document.getElementById('servicios');
+      if (serviciosElement) {
+        const rect = serviciosElement.getBoundingClientRect();
+        const isInView = rect.top <= 100 && rect.bottom >= 100; // Consideramos activo si está cerca del top
+        if (isInView) {
+          return "servicios";
+        }
+      }
+    }
+
     // Priorizar el hash si existe y coincide con un href de ancla
     if (currentHash) {
       const activeItem = navigationItems.find(item => item.href === currentHash);
@@ -78,18 +90,30 @@ const Navbar = () => {
   // Initialize activeTab state using getActiveTab
   useEffect(() => {
     setActiveTab(getActiveTab());
-  }, [location]); // Depende de location and getActiveTab (though getActiveTab dependencies are handled by location and navigationItems)
+  }, [location]);
+
+  // Detectar cuando estamos en la sección servicios por scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      
+      // Solo actualizar activeTab si estamos en la página principal sin hash
+      if (location.pathname === '/' && !location.hash) {
+        setActiveTab(getActiveTab());
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location]);
 
   return (
     <>
       {/* Top bar con información de contacto */}
-      <motion.div 
+      <div 
         className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 hidden lg:block"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 flex justify-start items-center">
           {/* Izquierda: Teléfono y correo */}
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 group">
@@ -101,35 +125,16 @@ const Navbar = () => {
               <span className="text-sm font-sans font-medium">contacto@ctemuco.cl</span>
             </div>
           </div>
-          
-          {/* Derecha: Horario y CTA */}
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-green-200" />
-              <span className="text-sm font-sans font-medium">Lun - Vie 8:00 AM - 6:00 PM</span>
-            </div>
-            <motion.button
-              onClick={() => handleNavigation('/contacto')}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-display font-semibold border border-white/20 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Cotización Gratis
-            </motion.button>
-          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Navbar principal */}
-      <motion.header 
+      <header 
         className={`sticky top-0 z-50 transition-all duration-300 ${
           isScrolled 
             ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-100' 
             : 'bg-white/90 backdrop-blur-sm shadow-md'
         }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -211,7 +216,7 @@ const Navbar = () => {
                 transition={{ delay: 0.5 }}
               >
                 <button 
-                  onClick={() => handleNavigation('/contacto')}
+                  onClick={() => handleNavigation({ path: '/contacto' })}
                   className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-xl text-sm font-display font-semibold shadow-lg transition-all duration-300"
                 >
                   Contáctanos Hoy
@@ -241,7 +246,7 @@ const Navbar = () => {
             </nav>
           </motion.div>
         </div>
-      </motion.header>
+      </header>
     </>
   );
 };
