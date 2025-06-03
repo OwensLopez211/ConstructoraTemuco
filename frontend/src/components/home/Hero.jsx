@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import StatsSection from './StatsSection';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+  
   const images = [
     'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
     'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2076&q=80',
@@ -18,6 +20,10 @@ const Hero = () => {
 
     return () => clearInterval(interval);
   }, [images.length]);
+
+  const handleContactClick = () => {
+    navigate('/contacto');
+  };
 
   return (
     <section className="relative w-full overflow-hidden bg-gray-50">
@@ -52,7 +58,7 @@ const Hero = () => {
           className="mb-12"
         >
           <img 
-            src="/Logo-grande.png" 
+            src="/Logo-grande.webp" 
             alt="Constructora Temuco Logo" 
             className="h-40 md:h-48 lg:h-80 w-auto object-contain drop-shadow-lg"
             onError={(e) => {
@@ -78,23 +84,20 @@ const Hero = () => {
           </div>
         </motion.div>
         
-        {/* CTA Button - Nuevo diseño moderno */}
-        <motion.a 
+        {/* CTA Button - Usando navigate */}
+        <motion.button 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           whileHover={{ y: -2, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          href="#contact"
-          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-display font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none"
+          onClick={handleContactClick}
+          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-display font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none cursor-pointer"
         >
           CONTÁCTANOS
-        </motion.a>
+        </motion.button>
         
       </div>
-      
-      {/* Bottom Stats Section */}
-      <StatsSection />
     </section>
   );
 };

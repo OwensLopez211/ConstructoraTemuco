@@ -19,7 +19,8 @@ class ImageService
 
     public function __construct()
     {
-        $this->disk = 'projects';
+        // CAMBIO: Usar disco 'public' en lugar de 'projects'
+        $this->disk = 'public';
         $this->allowedTypes = explode(',', config('app.allowed_image_types', 'jpg,jpeg,png,webp'));
         $this->maxSize = config('app.max_image_size', 10240); // KB
         $this->quality = config('app.image_quality', 85);
@@ -38,7 +39,7 @@ class ImageService
         $filename = $this->generateFilename($file);
         $thumbnailFilename = 'thumb_' . $filename;
 
-        // Rutas
+        // Rutas - CAMBIO: agregar 'projects/' como prefijo
         $projectPath = $this->getProjectPath($projectId);
         $imagePath = $projectPath . '/' . $filename;
         $thumbnailPath = $projectPath . '/' . $thumbnailFilename;
@@ -58,6 +59,10 @@ class ImageService
         $thumbnail = $manager->read($file);
         $this->createThumbnail($thumbnail);
         Storage::disk($this->disk)->put($thumbnailPath, $thumbnail->toJpeg($this->quality));
+
+        // NUEVO: También copiar a public/storage si no es un enlace simbólico
+        $this->ensurePublicCopy($imagePath);
+        $this->ensurePublicCopy($thumbnailPath);
 
         return [
             'filename' => $filename,
@@ -105,15 +110,54 @@ class ImageService
             Storage::disk($this->disk)->delete($thumbnailPath);
         }
 
+        // También eliminar de public/storage si existe
+        $this->deletePublicCopy($imagePath);
+        if ($thumbnailPath) {
+            $this->deletePublicCopy($thumbnailPath);
+        }
+
         return $deleted;
     }
 
     /**
-     * Obtener URL pública de imagen
+     * Obtener URL pública de imagen - CORREGIDO
      */
     public function getImageUrl(string $path): string
     {
-        return Storage::disk($this->disk)->url($path);
+        // Generar URL directamente con HTTPS
+        $baseUrl = config('app.url'); // https://ctemuco.cl
+        return $baseUrl . '/storage/' . $path;
+    }
+
+    /**
+     * NUEVO: Asegurar copia en public/storage para hosting compartido
+     */
+    protected function ensurePublicCopy(string $storagePath): void
+    {
+        $sourcePath = storage_path('app/public/' . $storagePath);
+        $targetPath = public_path('storage/' . $storagePath);
+
+        // Crear directorio si no existe
+        $targetDir = dirname($targetPath);
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true);
+        }
+
+        // Copiar archivo si existe y el destino no es un enlace simbólico
+        if (file_exists($sourcePath) && !is_link(public_path('storage'))) {
+            copy($sourcePath, $targetPath);
+        }
+    }
+
+    /**
+     * NUEVO: Eliminar copia de public/storage
+     */
+    protected function deletePublicCopy(string $storagePath): void
+    {
+        $targetPath = public_path('storage/' . $storagePath);
+        if (file_exists($targetPath) && !is_link(public_path('storage'))) {
+            unlink($targetPath);
+        }
     }
 
     /**
@@ -187,11 +231,11 @@ class ImageService
     }
 
     /**
-     * Obtener ruta del proyecto
+     * Obtener ruta del proyecto - CORREGIDO
      */
     protected function getProjectPath(int $projectId): string
     {
-        return "project_{$projectId}";
+        return "projects/project_{$projectId}";
     }
 
     /**
@@ -222,7 +266,7 @@ class ImageService
      */
     public function cleanOrphanImages(): int
     {
-        $allImages = Storage::disk($this->disk)->allFiles();
+        $allImages = Storage::disk($this->disk)->allFiles('projects');
         $usedImages = \App\Models\ProjectImage::pluck('path')->toArray();
 
         $orphanImages = array_diff($allImages, $usedImages);
@@ -231,6 +275,8 @@ class ImageService
         foreach ($orphanImages as $image) {
             if (Storage::disk($this->disk)->delete($image)) {
                 $deleted++;
+                // También eliminar de public si existe
+                $this->deletePublicCopy($image);
             }
         }
 

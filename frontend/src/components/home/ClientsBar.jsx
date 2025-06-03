@@ -128,13 +128,6 @@ const ClientsBar = () => {
               ))}
             </div>
           </div>
-
-          {/* Mobile touch hint */}
-          <div className="md:hidden text-center mt-4">
-            <p className="text-xs text-gray-500">
-              Desliza para ver más clientes
-            </p>
-          </div>
         </div>
       </div>
 

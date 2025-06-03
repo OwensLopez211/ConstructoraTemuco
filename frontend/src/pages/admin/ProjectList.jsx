@@ -424,15 +424,20 @@ const ProjectList = () => {
                 {projects.map((project) => (
                   <tr key={project.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                       {project.images && project.images.length > 0 ? (
-                         <img 
-                           src={project.images[0].thumbnail_url} 
-                           alt={`Imagen de ${project.name}`}
-                           className="w-16 h-12 object-cover rounded"
-                         />
-                       ) : (
-                         <span className="text-gray-400 text-xs">Sin imágenes</span>
-                       )}
+                      // En ProjectList.jsx, donde tienes la tabla, cambiar:
+                      {project.images && project.images.length > 0 ? (
+                        <img 
+                          src={project.images[0].thumbnail_url || `https://ctemuco.cl/storage/${project.images[0].path}`}
+                          alt={`Imagen de ${project.name}`}
+                          className="w-16 h-12 object-cover rounded"
+                          onError={(e) => {
+                            console.log('❌ Error loading project image:', e.target.src);
+                            e.target.src = '/placeholder-image.jpg';
+                          }}
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-xs">Sin imágenes</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                        <span

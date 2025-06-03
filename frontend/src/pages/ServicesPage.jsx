@@ -15,26 +15,12 @@ const ServicesPage = () => {
       path: "/servicios/proyectos-privados",
       image: "/Private-Obra.jpg"
     },
-    {
-      title: "Obras Civiles",
-      description: "Construcción de infraestructura vital para el desarrollo de comunidades.",
-      icon: Hammer,
-      path: "/servicios/obras-civiles",
-      image: "/Infraestructura.jpg"
-    },
-    {
+    {    
       title: "Proyectos Públicos",
       description: "Participamos en licitaciones públicas con registro MINVU y MOP vigentes.",
       icon: FileText,
       path: "/servicios/proyectos-publicos",
       image: "/Public-Obra.jpg"
-    },
-    {
-      title: "Servicios Profesionales",
-      description: "Mantención y reparación especializada para preservar tus espacios construidos.",
-      icon: Wrench,
-      path: "/servicios/servicios-profesionales",
-      image: "/Infraestructura.jpg"
     }
   ];
 

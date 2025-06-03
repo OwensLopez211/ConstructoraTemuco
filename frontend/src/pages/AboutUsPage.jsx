@@ -28,7 +28,7 @@ const AboutUsPage = () => {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
-                src="/Logo-Const-Temuco_2.webp"
+                src="/Logo-grande.webp"
                 alt="Constructora Temuco"
                 className="w-[70%] h-auto object-contain object-center rounded-2xl shadow-xl mx-auto"
               />

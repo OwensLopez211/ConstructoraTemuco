@@ -25,6 +25,7 @@ return [
         'http://localhost:3000',  // Por si cambias el puerto
         'http://127.0.0.1:5173',
         'http://127.0.0.1:3000',
+        'https://ctemuco.cl'
     ],
 
     'allowed_origins_patterns' => [],

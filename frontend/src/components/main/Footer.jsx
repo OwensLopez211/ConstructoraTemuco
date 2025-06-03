@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   MapPin, 
   Phone, 
@@ -13,8 +14,15 @@ import {
 } from 'lucide-react';
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    scrollToTop(); // Opcional: hacer scroll al top cuando navegues
   };
 
   return (
@@ -49,10 +57,10 @@ const Footer = () => {
               
               {/* Social Media */}
               <div className="flex space-x-4 justify-center sm:justify-start">
-                <a href="https://www.facebook.com/profile.php?id=100054373234943" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-300 group">
+                <a href="https://www.facebook.com/profile.php?id=100054373234943" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-300 group">
                   <Facebook className="w-5 h-5 text-gray-300 group-hover:text-white" />
                 </a>
-                <a href="https://www.instagram.com/constructoratemuco/" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-300 group">
+                <a href="https://www.instagram.com/constructoratemuco/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors duration-300 group">
                   <Instagram className="w-5 h-5 text-gray-300 group-hover:text-white" />
                 </a>
               </div>
@@ -63,29 +71,44 @@ const Footer = () => {
               <h4 className="text-lg font-display font-semibold mb-4 sm:mb-6">Enlaces Rápidos</h4>
               <ul className="space-y-3">
                 <li>
-                  <a href="/" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
+                  <button 
+                    onClick={() => handleNavigation('/')}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans text-left"
+                  >
                     Inicio
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
+                  <button 
+                    onClick={() => handleNavigation('/nosotros')}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans text-left"
+                  >
                     Sobre Nosotros
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
+                  <button 
+                    onClick={() => handleNavigation('/servicios')}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans text-left"
+                  >
                     Servicios
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
+                  <button 
+                    onClick={() => handleNavigation('/proyectos')}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans text-left"
+                  >
                     Proyectos
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans">
+                  <button 
+                    onClick={() => handleNavigation('/contacto')}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 text-sm sm:text-base font-sans text-left"
+                  >
                     Contacto
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -138,15 +161,24 @@ const Footer = () => {
             </div>
             
             <div className="flex flex-wrap justify-center sm:justify-end space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
+              <button 
+                onClick={() => handleNavigation('/privacidad')}
+                className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans"
+              >
                 Política de Privacidad
-              </a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
+              </button>
+              <button 
+                onClick={() => handleNavigation('/terminos')}
+                className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans"
+              >
                 Términos de Servicio
-              </a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans">
+              </button>
+              <button 
+                onClick={() => handleNavigation('/mapa-sitio')}
+                className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-sans"
+              >
                 Mapa del Sitio
-              </a>
+              </button>
             </div>
           </div>
         </div>

@@ -52,25 +52,26 @@ class ProjectImage extends Model
         return $query->orderBy('order')->orderBy('created_at');
     }
 
-    // Accessors
+    // Accessors - CORREGIDOS PARA HTTPS
     public function getUrlAttribute()
     {
-        try {
-            return app(ImageService::class)->getImageUrl($this->path);
-        } catch (\Exception $e) {
+        if (!$this->path) {
             return null;
         }
+
+        // Generar URL directamente con HTTPS - sin usar ImageService
+        $baseUrl = config('app.url'); // https://ctemuco.cl
+        return $baseUrl . '/storage/' . $this->path;
     }
 
     public function getThumbnailUrlAttribute()
     {
         if ($this->thumbnail_path) {
-            try {
-                return app(ImageService::class)->getImageUrl($this->thumbnail_path);
-            } catch (\Exception $e) {
-                return $this->url;
-            }
+            $baseUrl = config('app.url'); // https://ctemuco.cl
+            return $baseUrl . '/storage/' . $this->thumbnail_path;
         }
+
+        // Si no hay thumbnail, usar la imagen original
         return $this->url;
     }
 

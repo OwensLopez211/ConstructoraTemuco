@@ -69,8 +69,8 @@ const BeforeAfterSlider = () => {
           </p>
         </div>
 
-        {/* Navegación simple */}
-        <div className="flex justify-center gap-2 mb-6 md:mb-8">
+        {/* Navegación optimizada para móvil */}
+        <div className="flex justify-center gap-1 sm:gap-2 mb-6 md:mb-8 px-2">
           {projects.map((project, index) => (
             <button
               key={project.id}
@@ -78,13 +78,21 @@ const BeforeAfterSlider = () => {
                 setCurrentProject(index);
                 setSliderPosition(50);
               }}
-              className={`px-4 py-2 text-xs md:text-sm font-display font-medium rounded-full transition-all duration-200 ${
+              className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs font-display font-medium rounded-full transition-all duration-200 flex-shrink-0 ${
                 currentProject === index
                   ? 'bg-gray-900 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              {project.category}
+              <span className="block sm:hidden">
+                {project.category === 'Educacional' && 'Edu.'}
+                {project.category === 'Residencial' && 'Res.'}
+                {project.category === 'Comercial' && 'Com.'}
+                {project.category === 'Patrimonial' && 'Pat.'}
+              </span>
+              <span className="hidden sm:block">
+                {project.category}
+              </span>
             </button>
           ))}
         </div>

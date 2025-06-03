@@ -31,13 +31,69 @@ const ProjectImagesManager = ({ projectId, editing }) => {
   const fileInputRef = useRef(null);
   const dragRef = useRef(null);
 
+  // FUNCIÓN HELPER PARA GENERAR URLs CORRECTAS
+  const getImageUrl = (image) => {
+    if (!image) return null;
+    
+    // Si ya tiene una URL completa, usarla
+    if (image.url && image.url.startsWith('https://')) {
+      return image.url;
+    }
+    
+    // Si tiene path, construir la URL
+    if (image.path) {
+      return `https://ctemuco.cl/storage/${image.path}`;
+    }
+    
+    // Fallback
+    return null;
+  };
+
+  const getThumbnailUrl = (image) => {
+    if (!image) return null;
+    
+    // Si ya tiene una URL completa de thumbnail, usarla
+    if (image.thumbnail_url && image.thumbnail_url.startsWith('https://')) {
+      return image.thumbnail_url;
+    }
+    
+    // Si tiene thumbnail_path, construir la URL
+    if (image.thumbnail_path) {
+      return `https://ctemuco.cl/storage/${image.thumbnail_path}`;
+    }
+    
+    // Fallback a imagen principal
+    return getImageUrl(image);
+  };
+
   // Cargar imágenes del proyecto
   const loadImages = useCallback(async () => {
     try {
       setLoading(true);
       const response = await projectService.getProjectImages(projectId);
-      setImages(response.data.images || []);
+      
+      // DEBUG TEMPORAL - ELIMINAR DESPUÉS
+      console.log('🖼️ Response from API:', response);
+      console.log('🖼️ Images data:', response.data.images);
+      
+      const imagesData = response.data.images || [];
+      
+      // DEBUG TEMPORAL - Ver URLs de cada imagen
+      imagesData.forEach((image, index) => {
+        console.log(`🖼️ Imagen ${index + 1}:`, {
+          id: image.id,
+          path: image.path,
+          thumbnail_path: image.thumbnail_path,
+          url: image.url,
+          thumbnail_url: image.thumbnail_url,
+          generated_url: getImageUrl(image),
+          generated_thumbnail: getThumbnailUrl(image)
+        });
+      });
+      
+      setImages(imagesData);
     } catch (err) {
+      console.error('❌ Error loading images:', err);
       setError('Error al cargar imágenes: ' + err.message);
     } finally {
       setLoading(false);
@@ -317,87 +373,99 @@ const ProjectImagesManager = ({ projectId, editing }) => {
             Imágenes del proyecto
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {images.map((image, index) => (
-              <motion.div
-                key={image.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="relative group bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-200"
-              >
-                {/* Imagen */}
-                <div className="aspect-square relative overflow-hidden">
-                  <img
-                    src={image.thumbnail_url || image.url}
-                    alt={image.description || `Imagen ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
-                  />
-                  
-                  {/* Badge de imagen principal */}
-                  {image.is_main && (
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                        <Star className="w-3 h-3" />
-                        Principal
-                      </span>
-                    </div>
-                  )}
+            {images.map((image, index) => {
+              const imageUrl = getImageUrl(image);
+              const thumbnailUrl = getThumbnailUrl(image);
+              
+              return (
+                <motion.div
+                  key={image.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  className="relative group bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-200"
+                >
+                  {/* Imagen */}
+                  <div className="aspect-square relative overflow-hidden">
+                    <img
+                      src={thumbnailUrl}
+                      alt={image.description || `Imagen ${index + 1}`}
+                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
+                      onError={(e) => {
+                        console.log('❌ Error loading image:', thumbnailUrl);
+                        e.target.src = '/placeholder-image.jpg';
+                      }}
+                      onLoad={() => {
+                        console.log('✅ Image loaded successfully:', thumbnailUrl);
+                      }}
+                    />
+                    
+                    {/* Badge de imagen principal */}
+                    {image.is_main && (
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                          <Star className="w-3 h-3" />
+                          Principal
+                        </span>
+                      </div>
+                    )}
 
-                  {/* Overlay con acciones */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="flex gap-2">
-                      {/* Ver imagen */}
-                      <button
-                        onClick={() => setLightboxImage(image)}
-                        className="bg-white/90 text-gray-800 p-2 rounded-full hover:bg-white transition-colors duration-200"
-                        title="Ver imagen completa"
-                      >
-                        <ZoomIn className="w-4 h-4" />
-                      </button>
+                    {/* Overlay con acciones */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <div className="flex gap-2">
+                        {/* Ver imagen */}
+                        <button
+                          onClick={() => setLightboxImage(image)}
+                          className="bg-white/90 text-gray-800 p-2 rounded-full hover:bg-white transition-colors duration-200"
+                          title="Ver imagen completa"
+                        >
+                          <ZoomIn className="w-4 h-4" />
+                        </button>
 
-                      {editing && (
-                        <>
-                          {/* Establecer como principal */}
-                          {!image.is_main && (
+                        {editing && (
+                          <>
+                            {/* Establecer como principal */}
+                            {!image.is_main && (
+                              <button
+                                onClick={() => handleSetMainImage(image.id)}
+                                className="bg-yellow-500/90 text-white p-2 rounded-full hover:bg-yellow-500 transition-colors duration-200"
+                                title="Establecer como imagen principal"
+                              >
+                                <Star className="w-4 h-4" />
+                              </button>
+                            )}
+
+                            {/* Eliminar */}
                             <button
-                              onClick={() => handleSetMainImage(image.id)}
-                              className="bg-yellow-500/90 text-white p-2 rounded-full hover:bg-yellow-500 transition-colors duration-200"
-                              title="Establecer como imagen principal"
+                              onClick={() => handleDeleteImage(image.id)}
+                              className="bg-red-500/90 text-white p-2 rounded-full hover:bg-red-500 transition-colors duration-200"
+                              title="Eliminar imagen"
                             >
-                              <Star className="w-4 h-4" />
+                              <Trash2 className="w-4 h-4" />
                             </button>
-                          )}
-
-                          {/* Eliminar */}
-                          <button
-                            onClick={() => handleDeleteImage(image.id)}
-                            className="bg-red-500/90 text-white p-2 rounded-full hover:bg-red-500 transition-colors duration-200"
-                            title="Eliminar imagen"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </>
-                      )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Información de la imagen */}
-                <div className="p-3">
-                  <p className="text-xs text-gray-500 truncate" title={image.original_name}>
-                    {image.original_name}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    {image.formatted_size} • {image.dimensions}
-                  </p>
-                  {image.description && (
-                    <p className="text-xs text-gray-600 mt-1 truncate" title={image.description}>
-                      {image.description}
+                  {/* Información de la imagen */}
+                  <div className="p-3">
+                    <p className="text-xs text-gray-500 truncate" title={image.original_name}>
+                      {image.original_name}
                     </p>
-                  )}
-                </div>
-              </motion.div>
-            ))}
+                    <p className="text-xs text-gray-400">
+                      {image.formatted_size} • {image.dimensions}
+                    </p>
+                    {image.description && (
+                      <p className="text-xs text-gray-600 mt-1 truncate" title={image.description}>
+                        {image.description}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       ) : (
@@ -437,9 +505,13 @@ const ProjectImagesManager = ({ projectId, editing }) => {
               </button>
               
               <img
-                src={lightboxImage.url}
+                src={getImageUrl(lightboxImage)}
                 alt={lightboxImage.description || 'Imagen del proyecto'}
                 className="max-w-full max-h-full object-contain rounded-lg"
+                onError={(e) => {
+                  console.log('❌ Error loading lightbox image:', getImageUrl(lightboxImage));
+                  e.target.src = '/placeholder-image.jpg';
+                }}
               />
               
               {lightboxImage.description && (
