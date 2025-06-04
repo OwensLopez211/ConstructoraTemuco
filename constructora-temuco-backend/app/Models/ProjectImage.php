@@ -52,23 +52,22 @@ class ProjectImage extends Model
         return $query->orderBy('order')->orderBy('created_at');
     }
 
-    // Accessors - CORREGIDOS PARA HTTPS
+    // Accessors - CORREGIDOS PARA SUBDIRECTORIO
     public function getUrlAttribute()
     {
         if (!$this->path) {
             return null;
         }
 
-        // Generar URL directamente con HTTPS - sin usar ImageService
-        $baseUrl = config('app.url'); // https://ctemuco.cl
-        return $baseUrl . '/storage/' . $this->path;
+        // URL directa a la ubicación real en el subdirectorio
+        return 'https://ctemuco.cl/constructora-temuco-backend/storage/app/public/' . $this->path;
     }
 
     public function getThumbnailUrlAttribute()
     {
         if ($this->thumbnail_path) {
-            $baseUrl = config('app.url'); // https://ctemuco.cl
-            return $baseUrl . '/storage/' . $this->thumbnail_path;
+            // URL directa a la ubicación real en el subdirectorio
+            return 'https://ctemuco.cl/constructora-temuco-backend/storage/app/public/' . $this->thumbnail_path;
         }
 
         // Si no hay thumbnail, usar la imagen original

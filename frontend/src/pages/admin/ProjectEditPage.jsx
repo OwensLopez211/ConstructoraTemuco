@@ -88,24 +88,49 @@ const ProjectEditPage = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      // Excluir propiedades que no deben enviarse al backend en la actualización principal
-      const { images, user, formatted_budget, type_name, status_name, days_remaining, is_overdue, can_be_edited, created_at, updated_at, ...dataToSave } = formData;
-
-      // Asegurarse de que los campos vacíos se envíen como null si el backend lo espera
-      for (const key in dataToSave) {
-          if (dataToSave[key] === '') {
-              dataToSave[key] = null;
-          }
+      
+      // Datos básicos que SIEMPRE enviamos
+      const dataToSave = {
+        name: formData.name || '',
+        client_name: formData.client_name || '',
+        location: formData.location || '',
+        type: formData.type || 'gubernamental',
+        status: formData.status || 'completado'
+      };
+      
+      // Campos opcionales - solo si tienen valor
+      if (formData.description && formData.description.trim()) {
+        dataToSave.description = formData.description.trim();
       }
-
-      console.log('Saving data:', dataToSave); // Debug
+      
+      if (formData.budget && formData.budget !== '') {
+        dataToSave.budget = parseFloat(formData.budget);
+      }
+      
+      if (formData.start_date && formData.start_date !== '') {
+        dataToSave.start_date = formData.start_date;
+      }
+      
+      if (formData.end_date && formData.end_date !== '') {
+        dataToSave.end_date = formData.end_date;
+      }
+      
+      if (formData.progress !== undefined && formData.progress !== '') {
+        dataToSave.progress_percentage = parseInt(formData.progress) || 0;
+      }
+  
+      console.log('📤 Enviando datos:', dataToSave);
+      
       const response = await projectService.updateProject(projectId, dataToSave);
-      console.log('Save response:', response); // Debug
-      await loadProject(); // Recargar datos actualizados
+      
+      await loadProject();
       setEditing(false);
       showToast(response.message || 'Proyecto actualizado exitosamente', 'success');
+      
     } catch (err) {
-      showToast('Error al actualizar el proyecto: ' + err.message, 'error');
+      console.error('❌ Error:', err);
+      const errorMsg = err.message || 'Error al actualizar el proyecto';
+      showToast(errorMsg, 'error');
     } finally {
       setSaving(false);
     }

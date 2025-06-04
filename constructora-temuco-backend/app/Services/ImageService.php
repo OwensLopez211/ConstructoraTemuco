@@ -119,14 +119,13 @@ class ImageService
         return $deleted;
     }
 
-    /**
-     * Obtener URL pública de imagen - CORREGIDO
-     */
+/**
+ * Obtener URL pública de imagen - CORREGIDO PARA SUBDIRECTORIO
+ */
     public function getImageUrl(string $path): string
     {
-        // Generar URL directamente con HTTPS
-        $baseUrl = config('app.url'); // https://ctemuco.cl
-        return $baseUrl . '/storage/' . $path;
+        // URL directa a la ubicación real en el subdirectorio
+        return 'https://ctemuco.cl/constructora-temuco-backend/storage/app/public/' . $path;
     }
 
     /**

@@ -31,21 +31,33 @@ const ProjectImagesManager = ({ projectId, editing }) => {
   const fileInputRef = useRef(null);
   const dragRef = useRef(null);
 
-  // FUNCIÓN HELPER PARA GENERAR URLs CORRECTAS
+  // FUNCIÓN HELPER PARA GENERAR URLs CORRECTAS - MEJORADA
   const getImageUrl = (image) => {
     if (!image) return null;
     
-    // Si ya tiene una URL completa, usarla
-    if (image.url && image.url.startsWith('https://')) {
+    console.log('🔍 Procesando imagen:', image);
+    
+    // Si ya tiene una URL completa válida, usarla
+    if (image.url && (image.url.startsWith('https://') || image.url.startsWith('http://'))) {
+      console.log('✅ URL completa encontrada:', image.url);
       return image.url;
     }
     
     // Si tiene path, construir la URL
     if (image.path) {
-      return `https://ctemuco.cl/storage/${image.path}`;
+      const constructedUrl = `https://ctemuco.cl/storage/${image.path}`;
+      console.log('🔧 URL construida:', constructedUrl);
+      return constructedUrl;
     }
     
-    // Fallback
+    // Si tiene filename, intentar construir path
+    if (image.filename) {
+      const constructedUrl = `https://ctemuco.cl/storage/projects/project_${projectId}/${image.filename}`;
+      console.log('🔧 URL construida desde filename:', constructedUrl);
+      return constructedUrl;
+    }
+    
+    console.log('❌ No se pudo generar URL para:', image);
     return null;
   };
 
@@ -53,7 +65,7 @@ const ProjectImagesManager = ({ projectId, editing }) => {
     if (!image) return null;
     
     // Si ya tiene una URL completa de thumbnail, usarla
-    if (image.thumbnail_url && image.thumbnail_url.startsWith('https://')) {
+    if (image.thumbnail_url && (image.thumbnail_url.startsWith('https://') || image.thumbnail_url.startsWith('http://'))) {
       return image.thumbnail_url;
     }
     
@@ -70,24 +82,27 @@ const ProjectImagesManager = ({ projectId, editing }) => {
   const loadImages = useCallback(async () => {
     try {
       setLoading(true);
+      console.log('🔄 Cargando imágenes para proyecto:', projectId);
+      
       const response = await projectService.getProjectImages(projectId);
       
-      // DEBUG TEMPORAL - ELIMINAR DESPUÉS
-      console.log('🖼️ Response from API:', response);
-      console.log('🖼️ Images data:', response.data.images);
+      // DEBUG MEJORADO
+      console.log('📦 Response completa:', response);
+      console.log('📦 Images data:', response.data);
       
       const imagesData = response.data.images || [];
       
-      // DEBUG TEMPORAL - Ver URLs de cada imagen
+      // DEBUG DETALLADO - Ver cada imagen
       imagesData.forEach((image, index) => {
         console.log(`🖼️ Imagen ${index + 1}:`, {
           id: image.id,
+          filename: image.filename,
           path: image.path,
           thumbnail_path: image.thumbnail_path,
           url: image.url,
           thumbnail_url: image.thumbnail_url,
-          generated_url: getImageUrl(image),
-          generated_thumbnail: getThumbnailUrl(image)
+          'URL generada': getImageUrl(image),
+          'Thumbnail generado': getThumbnailUrl(image)
         });
       });
       
@@ -178,13 +193,18 @@ const ProjectImagesManager = ({ projectId, editing }) => {
 
     try {
       setUploading(true);
+      console.log('📤 Subiendo', selectedFiles.length, 'archivos...');
+      
       const formData = new FormData();
       
-      selectedFiles.forEach((file) => {
+      selectedFiles.forEach((file, index) => {
+        console.log(`📎 Archivo ${index + 1}:`, file.name, file.type, file.size);
         formData.append('images[]', file);
       });
 
       const response = await projectService.uploadProjectImages(projectId, formData);
+      
+      console.log('✅ Respuesta de subida:', response);
       
       setSuccess(response.message);
       setSelectedFiles([]);
@@ -198,6 +218,7 @@ const ProjectImagesManager = ({ projectId, editing }) => {
       await loadImages();
       
     } catch (err) {
+      console.error('❌ Error al subir:', err);
       setError('Error al subir imágenes: ' + err.message);
     } finally {
       setUploading(false);
@@ -377,6 +398,17 @@ const ProjectImagesManager = ({ projectId, editing }) => {
               const imageUrl = getImageUrl(image);
               const thumbnailUrl = getThumbnailUrl(image);
               
+              console.log(`🖼️ Renderizando imagen ${index + 1}:`, {
+                imageUrl,
+                thumbnailUrl,
+                image
+              });
+              
+              if (!thumbnailUrl && !imageUrl) {
+                console.log('⚠️ No se pudo generar URL para la imagen:', image);
+                return null;
+              }
+              
               return (
                 <motion.div
                   key={image.id}
@@ -388,15 +420,24 @@ const ProjectImagesManager = ({ projectId, editing }) => {
                   {/* Imagen */}
                   <div className="aspect-square relative overflow-hidden">
                     <img
-                      src={thumbnailUrl}
+                      src={thumbnailUrl || imageUrl}
                       alt={image.description || `Imagen ${index + 1}`}
                       className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
                       onError={(e) => {
-                        console.log('❌ Error loading image:', thumbnailUrl);
-                        e.target.src = '/placeholder-image.jpg';
+                        console.log('❌ Error loading image. Intentando URL alternativa...');
+                        console.log('URL que falló:', e.target.src);
+                        
+                        // Intentar URL alternativa
+                        if (e.target.src === thumbnailUrl && imageUrl !== thumbnailUrl) {
+                          console.log('🔄 Probando URL de imagen principal:', imageUrl);
+                          e.target.src = imageUrl;
+                        } else {
+                          console.log('❌ Todas las URLs fallaron. Usando placeholder.');
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
+                        }
                       }}
                       onLoad={() => {
-                        console.log('✅ Image loaded successfully:', thumbnailUrl);
+                        console.log('✅ Image loaded successfully:', thumbnailUrl || imageUrl);
                       }}
                     />
                     
@@ -462,6 +503,10 @@ const ProjectImagesManager = ({ projectId, editing }) => {
                         {image.description}
                       </p>
                     )}
+                    {/* DEBUG INFO - REMOVER EN PRODUCCIÓN */}
+                    <p className="text-xs text-blue-500 mt-1 truncate" title={thumbnailUrl || imageUrl}>
+                      URL: {(thumbnailUrl || imageUrl)?.substring(0, 50)}...
+                    </p>
                   </div>
                 </motion.div>
               );
@@ -510,7 +555,7 @@ const ProjectImagesManager = ({ projectId, editing }) => {
                 className="max-w-full max-h-full object-contain rounded-lg"
                 onError={(e) => {
                   console.log('❌ Error loading lightbox image:', getImageUrl(lightboxImage));
-                  e.target.src = '/placeholder-image.jpg';
+                  e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAzMEMyNS41MjI5IDMwIDMwIDI1LjUyMjkgMzAgMjBDMzAgMTQuNDc3MSAyNS41MjI5IDEwIDIwIDEwQzE0LjQ3NzEgMTAgMTAgMTQuNDc3MSAxMCAyMEMxMCAyNS41MjI5IDE0LjQ3NzEgMzAgMjAgMzBaIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0yMCAyM0MyMS42NTY5IDIzIDIzIDIxLjY1NjkgMjMgMjBDMjMgMTguMzQzMSAyMS42NTY5IDE3IDIwIDE3QzE4LjM0MzEgMTcgMTcgMTguMzQzMSAxNyAyMEMxNyAyMS42NTY5IDE4LjM0MzEgMjMgMjAgMjNaIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=';
                 }}
               />
               
