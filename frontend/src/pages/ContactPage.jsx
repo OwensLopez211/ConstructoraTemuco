@@ -25,8 +25,8 @@ const ContactPage = () => {
         {/* Contact Cards */}
         <div className="mb-6">
            <ContactCards />
-        </div>
-
+                  </div>
+                  
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-1 gap-6 items-stretch">
           
@@ -34,14 +34,14 @@ const ContactPage = () => {
           <div className="space-y-5">
             <ContactWhyChoose />
             <ContactMap />
-          </div>
-        </div>
-      
-      </div>
+              </div>
+            </div>
 
+                  </div>
+                  
       {/* Footer CTA */}
       <ContactCTA />
-    </div>
+        </div>
   );
 };
 

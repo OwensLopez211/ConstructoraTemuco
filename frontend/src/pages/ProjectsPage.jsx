@@ -17,7 +17,7 @@ const ProjectsPage = () => {
   const categories = [
     { id: 'todos', label: 'Todos' },
     { id: 'privado', label: 'Privados' },
-    { id: 'gubernamental', label: 'Gubernamentales' },
+    { id: 'gubernamental', label: 'Públicos' },
   ];
 
   useEffect(() => {

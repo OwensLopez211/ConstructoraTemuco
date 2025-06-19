@@ -38,39 +38,28 @@ const Hero = () => {
       />
       
       {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col items-start text-left">
-        
-        {/* Top Text */}
-        <motion.p 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-lg md:text-xl lg:text-2xl font-display font-semibold text-gray-800 mb-8 max-w-2xl"
-        >
-          Construimos para darle valor a tus proyectos
-        </motion.p>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col items-center md:items-start text-center md:text-left">
         
         {/* Logo Area */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12"
+          className="mb-8 md:mb-12 flex flex-col items-center md:items-start w-full"
         >
           <img 
             src="/Logo-grande.webp" 
             alt="Constructora Temuco Logo" 
-            className="h-40 md:h-48 lg:h-80 w-auto object-contain drop-shadow-lg"
+            className="h-40 md:h-48 lg:h-80 w-auto object-contain drop-shadow-lg mx-auto md:mx-0"
             onError={(e) => {
               // Fallback si no se encuentra la imagen
               e.target.style.display = 'none';
               e.target.nextElementSibling.style.display = 'block';
             }}
           />
-          
           {/* Fallback Logo Text (se muestra si falla la imagen) */}
-          <div className="hidden flex-col items-start">
-            <div className="flex flex-col items-center mb-4">
+          <div className="hidden flex-col items-center md:items-start">
+            <div className="flex flex-col items-center md:items-start mb-4">
               {/* Casa/Edificio Icon */}
               <div className="w-16 h-16 md:w-20 md:h-20 bg-green-600 rounded-lg flex items-center justify-center mb-4 shadow-lg">
                 <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -83,6 +72,16 @@ const Hero = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Top Text */}
+        <motion.p 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-lg md:text-xl lg:text-2xl font-display font-semibold text-gray-800 mb-8 max-w-2xl mx-auto md:mx-0 text-center md:text-left"
+        >
+          Construimos para darle valor a tus proyectos
+        </motion.p>
         
         {/* CTA Button - Usando navigate */}
         <motion.button 
@@ -92,7 +91,7 @@ const Hero = () => {
           whileHover={{ y: -2, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleContactClick}
-          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-display font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none cursor-pointer"
+          className="bg-transparent border-2 border-green-600 hover:bg-green-600 hover:border-green-600 text-green-600 hover:text-white text-base md:text-lg font-display font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 tracking-wide focus:ring-4 focus:ring-green-200 focus:outline-none cursor-pointer mx-auto md:mx-0"
         >
           CONTÁCTANOS
         </motion.button>

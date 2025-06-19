@@ -64,12 +64,13 @@ const BeforeAfterSlider = () => {
             <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"> calidad</span>
           </h2>
           
-          <p className="text-lg md:text-xl text-gray-600 font-sans">
+          {/* <p className="text-lg md:text-xl text-gray-600 font-sans">
             A particulares y empresas
-          </p>
+          </p> */}
         </div>
 
         {/* Navegación optimizada para móvil */}
+        {false && (
         <div className="flex justify-center gap-1 sm:gap-2 mb-6 md:mb-8 px-2">
           {projects.map((project, index) => (
             <button
@@ -90,12 +91,13 @@ const BeforeAfterSlider = () => {
                 {project.category === 'Comercial' && 'Com.'}
                 {project.category === 'Patrimonial' && 'Pat.'}
               </span>
-              <span className="hidden sm:block">
+              {/* <span className="hidden sm:block">
                 {project.category}
-              </span>
+              </span> */}
             </button>
           ))}
         </div>
+        )}
 
         {/* Slider principal */}
         <div className="max-w-4xl mx-auto">

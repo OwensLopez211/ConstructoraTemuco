@@ -14,6 +14,15 @@ const HeaderPage = ({
 }) => {
   return (
     <header className={`relative ${height} flex items-center justify-center overflow-hidden`}>
+      {/* Logo en la esquina superior derecha */}
+      <div className="absolute top-6 right-8 z-20 hidden md:block bg-white rounded-xl p-2 shadow-lg" style={{maxWidth: '148px'}}>
+        <img 
+          src="/Logo-grande.webp" 
+          alt="Logo Constructora Temuco" 
+          className="w-28 h-auto"
+          style={{maxWidth: '140px'}}
+        />
+      </div>
       {/* Si hay imagen de fondo */}
       {backgroundImage && (
         <>
