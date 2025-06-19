@@ -1,16 +1,90 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/LogoNav2.png" />
+    
+    <!-- Favicon optimizado -->
+    <link rel="icon" type="image/png" href="/LogoNav2.png" />
+    <link rel="apple-touch-icon" href="/LogoNav2.png" />
+    
+    <!-- Meta viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Constructora Temuco - Construcción y Proyectos Inmobiliarios en Temuco</title>
+    <meta name="description" content="Constructora líder en Temuco. Especialistas en construcción residencial, comercial y proyectos inmobiliarios. Calidad garantizada y más de 8 años de experiencia." />
+    <meta name="keywords" content="constructora temuco, construcción temuco, proyectos inmobiliarios" />
+    <meta name="author" content="Constructora Temuco" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL - Reemplaza con tu dominio real -->
+    <link rel="canonical" href="https://ctemuco.cl" />
+    
+    <!-- Open Graph para redes sociales -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Constructora Temuco - Construcción y Proyectos Inmobiliarios" />
+    <meta property="og:description" content="Constructora líder en Temuco. Especialistas en construcción residencial, comercial y proyectos inmobiliarios." />
+    <meta property="og:image" content="https://ctemuco.cl/LogoNav2.png" />
+    <meta property="og:url" content="https://ctemuco.cl" />
+    <meta property="og:site_name" content="Constructora Temuco" />
+    <meta property="og:locale" content="es_CL" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Constructora Temuco - Construcción y Proyectos Inmobiliarios" />
+    <meta name="twitter:description" content="Constructora líder en Temuco. Especialistas en construcción residencial, comercial y proyectos inmobiliarios." />
+    <meta name="twitter:image" content="https://ctemuco.cl/LogoNav2.png" />
+    
+    <!-- Datos estructurados JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Constructora Temuco",
+      "url": "https://ctemuco.cl",
+      "logo": "https://ctemuco.cl/LogoNav2.png",
+      "description": "Constructora líder en Temuco especializada en construcción públicos y privados",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Volcan Calbuco 345",
+        "addressLocality": "Temuco",
+        "addressRegion": "Araucanía",
+        "addressCountry": "CL"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+56-45-2-810749",
+        "contactType": "customer service",
+        "availableLanguage": "Spanish"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=100054373234943",
+        "https://www.instagram.com/constructoratemuco/"
+      ]
+    }
+    </script>
+    
+    <!-- Fonts optimizados -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Constructora Temuco</title>
+    
+    <!-- Preload recursos críticos -->
+    <link rel="preload" href="/LogoNav2.png" as="image" />
+    
+    <!-- No mostrar números de teléfono como links en iOS -->
+    <meta name="format-detection" content="telephone=no" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Contenido inicial para SEO mientras carga React -->
+    <div id="root">
+      <noscript>
+        <div style="text-align: center; padding: 50px;">
+          <h1>Constructora Temuco</h1>
+          <p>Para una mejor experiencia, por favor habilita JavaScript en tu navegador.</p>
+        </div>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
