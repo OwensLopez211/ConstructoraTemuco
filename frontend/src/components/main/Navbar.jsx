@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Phone, Mail, Menu, X } from "lucide-react";
+import { Phone, Mail, Menu, X, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
@@ -138,9 +138,11 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
+            {/* Espacio izquierdo para balancear (desktop) */}
+            <div className="hidden lg:flex lg:w-48"></div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center justify-center space-x-4 flex-grow">
+            {/* Desktop Navigation - Centrado */}
+            <nav className="hidden lg:flex items-center justify-center space-x-4">
               {navigationItems.map((item) => (
                 <button
                   key={item.id}
@@ -159,10 +161,23 @@ const Navbar = () => {
               ))}
             </nav>
 
+            {/* Desktop Zoho Access - Derecha */}
+            <div className="hidden lg:flex lg:w-48 justify-end">
+              <a
+                href="https://accounts.zoho.com/signin?service_language=es&servicename=VirtualOffice&signupurl=https://www.zoho.com/es-xl/workplace/pricing.html&serviceurl=https://workplace.zoho.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300 group shadow-md"
+              >
+                <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-display font-medium">Acceso Empleados</span>
+              </a>
+            </div>
+
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden p-2 rounded-xl text-gray-700 hover:text-green-600 hover:bg-gray-100 transition-all duration-200"
+              className="lg:hidden ml-auto p-2 rounded-xl text-gray-700 hover:text-green-600 hover:bg-gray-100 transition-all duration-200"
             >
               <motion.div
                 animate={{ rotate: isMenuOpen ? 90 : 0 }}
@@ -208,16 +223,35 @@ const Navbar = () => {
                 </motion.div>
               ))}
 
+              {/* Mobile Zoho Access */}
+              <motion.div 
+                className="pt-3"
+                initial={{ x: -20, opacity: 0 }}
+                animate={isMenuOpen ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
+                transition={{ delay: navigationItems.length * 0.1 }}
+              >
+                <a
+                  href="https://accounts.zoho.com/signin?service_language=es&servicename=VirtualOffice&signupurl=https://www.zoho.com/es-xl/workplace/pricing.html&serviceurl=https://workplace.zoho.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMenu}
+                  className="w-full flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl text-sm font-display font-semibold shadow-lg transition-all duration-300 group"
+                >
+                  <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="text-center">Acceso Empleados - Zoho</span>
+                </a>
+              </motion.div>
+
               {/* Mobile CTA Button */}
               <motion.div 
                 className="pt-4 border-t border-gray-100"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isMenuOpen ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: (navigationItems.length + 1) * 0.1 }}
               >
                 <button 
                   onClick={() => handleNavigation({ path: '/contacto' })}
-                  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-xl text-sm font-display font-semibold shadow-lg transition-all duration-300"
+                  className="w-full bg-white border-2 border-green-600 text-green-600 py-3 rounded-xl text-sm font-display font-semibold hover:bg-green-50 transition-all duration-300"
                 >
                   Contáctanos Hoy
                 </button>
@@ -228,7 +262,7 @@ const Navbar = () => {
                 className="pt-4 border-t border-gray-100 space-y-3"
                 initial={{ y: 20, opacity: 0 }}
                 animate={isMenuOpen ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: (navigationItems.length + 2) * 0.1 }}
               >
                 <div className="flex items-center space-x-3 text-gray-600">
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
